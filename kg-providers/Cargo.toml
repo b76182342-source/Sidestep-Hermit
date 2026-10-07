@@ -1,0 +1,29 @@
+[package]
+name = "kg-providers"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+kg-core.workspace = true
+tokio.workspace = true
+reqwest.workspace = true
+walkdir.workspace = true
+notify.workspace = true
+lofty.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+uuid.workspace = true
+async-trait.workspace = true
+
+# Kugou feature
+kugou_sdk = { version = "0.2", optional = true }
+
+[features]
+default = []
+kugou = ["dep:kugou_sdk"]
+
+[lints]
+workspace = true

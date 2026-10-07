@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<title>KGPlayer 登录</title>
+<script src="9cf728bb-7480-476a-9a94-07cfbd9707a4"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}button{font-family:inherit}
+.sub{font-size:12px;color:#5F5E58}
+.serif{font-family:'Noto Serif CJK SC','Source Han Serif SC','Songti SC',Georgia,serif}
+.lb{display:block;font-size:12px;color:#5F5E58;margin-bottom:8px}
+.in{width:100%;height:44px;box-sizing:border-box;padding:0 14px;border:1px solid #DDD9CB;border-radius:12px;background:#FAF9F5;color:#141413;font-size:14px;font-family:inherit;outline:0}
+.chip{height:44px;padding:0 16px;border:1px solid #DDD9CB;border-radius:12px;background:#fff;color:#141413;font-size:13px;cursor:pointer;white-space:nowrap}
+</style>
+</helmet>
+<div style="width:1280px;height:800px;display:flex;flex-direction:column;background:#FAF9F5;color:#141413;font-family:'Noto Sans CJK SC','Noto Sans SC','PingFang SC','Microsoft YaHei',system-ui,sans-serif;overflow:hidden">
+
+<div class="serif" style="font-size:22px;font-weight:500;padding:28px 40px">KGPlayer</div>
+
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding-bottom:48px">
+<div style="width:760px;box-sizing:border-box;background:#fff;border:1px solid #E3E0D4;border-radius:24px;padding:40px">
+<h1 class="serif" style="margin:0;font-size:30px;font-weight:500">登录酷狗</h1>
+<p style="margin:8px 0 32px;font-size:14px;color:#5F5E58">登录后可以使用每日推荐和云端歌单，不登录也能播放本地音乐。</p>
+
+<div style="display:grid;grid-template-columns:1fr 1px 220px;gap:40px">
+<div>
+<label class="lb">手机号<input class="in" style="margin-top:8px" placeholder="请输入手机号" inputmode="tel"></label>
+<div style="margin-top:20px">
+<label class="lb" for="code">验证码</label>
+<div style="display:flex;gap:10px"><input id="code" class="in" placeholder="6 位验证码" inputmode="numeric"><button class="chip">获取验证码</button></div>
+</div>
+<button style="width:100%;height:48px;margin-top:28px;border:0;border-radius:24px;background:#B85537;color:#fff;font-size:15px;font-weight:600;cursor:pointer">登录</button>
+<button style="display:block;margin:16px auto 0;border:0;background:transparent;color:#5F5E58;font-size:13px;text-decoration:underline;cursor:pointer">暂不登录，只用本地音乐</button>
+</div>
+
+<div style="background:#E3E0D4"></div>
+
+<div style="display:flex;flex-direction:column;align-items:center">
+<div style="font-size:12px;color:#5F5E58;margin-bottom:8px;align-self:flex-start">扫码登录</div>
+<div style="width:200px;height:200px;box-sizing:border-box;border:2px dashed #DDD9CB;border-radius:16px;display:grid;place-items:center;text-align:center;color:#5F5E58;font-size:12px;padding:20px">二维码<br>由登录接口返回</div>
+<div class="sub" style="margin-top:12px">使用酷狗手机端扫码</div>
+</div>
+</div>
+</div>
+
+<div class="sub" style="text-align:center;line-height:20px">凭据只保存在系统密钥环中，不会写入日志。<br>本应用为非官方客户端，与酷狗无隶属关系。</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:800}}">
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+
+
+</body></html>

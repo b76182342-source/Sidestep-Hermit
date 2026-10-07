@@ -1,0 +1,84 @@
+/* KGPlayer 设计令牌 —— 严格取自 design-reference/01-main.html 等设计稿 */
+
+:root {
+  /* ── 背景 ── */
+  --bg: #faf9f5;            /* 应用主背景 */
+  --bg-sidebar: #f0eee6;    /* 左侧边栏 */
+  --bg-panel: #f5f4ed;      /* 右栏 / 播放器栏 */
+  --surface: #ffffff;       /* 搜索框、选中态滑块 */
+  --surface-2: #efede4;     /* 分段控件底、行选中 */
+  --hover: #f3f1ea;         /* 列表行 hover */
+  --hover-2: #e9e6db;       /* 导航 hover、图标按钮 hover */
+  --nav-on: #e4e1d5;        /* 导航选中 */
+
+  /* ── 描边 ── */
+  --border: #e3e0d4;
+  --border-2: #ddd9cb;
+
+  /* ── 文字 ── */
+  --text: #141413;
+  --text-2: #5f5e58;
+  --text-3: #8a8880;
+
+  /* ── 强调（赤褐） ── */
+  --accent: #9e4326;        /* 播放中曲名、波形、当前歌词 */
+  --accent-btn: #b85537;    /* 播放按钮、进度条已播 */
+  --accent-hover: #a8482c;
+
+  /* ── 深色按钮 ── */
+  --btn-dark: #141413;
+  --btn-dark-text: #faf9f5;
+
+  /* ── 专辑封面柔和色板 ── */
+  --cover-1: #e3c9b6;
+  --cover-2: #d9b79d;
+  --cover-3: #c8cfbf;
+  --cover-4: #cfc6d8;
+  --cover-5: #b9cbd6;
+  --cover-6: #d6e0e8;
+
+  /* ── 字体 ── */
+  --font-sans: 'Noto Sans CJK SC', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei',
+    system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Noto Serif CJK SC', 'Source Han Serif SC', 'Songti SC', Georgia, serif;
+
+  /* ── 字号 ── */
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs-base: 14px;
+  --fs-md: 15px;
+  --fs-lg: 19px;
+  --fs-xl: 22px;
+  --fs-2xl: 26px;
+  --fs-3xl: 32px;
+  --fs-4xl: 34px;
+
+  /* ── 圆角 ── */
+  --r-sm: 8px;
+  --r-md: 10px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+  --r-2xl: 20px;
+  --r-pill: 22px;
+
+  /* ── 尺寸 ── */
+  --sidebar-w: 220px;
+  --panel-w: 340px;
+  --player-h: 88px;
+  --row-h: 56px;
+  --cover: 40px;
+
+  /* ── 过渡 ── */
+  --t-fast: 120ms ease;
+  --t-base: 200ms ease;
+
+  /* ── 阴影 ── */
+  --shadow-sm: 0 1px 2px rgba(20, 20, 19, 0.12);
+  --shadow-md: 0 2px 8px rgba(20, 20, 19, 0.10);
+}
+
+/* 浅色即唯一主题；保留 data-theme 以兼容旧代码 */
+[data-theme='dark'],
+[data-theme='light'] {
+  color-scheme: light;
+}

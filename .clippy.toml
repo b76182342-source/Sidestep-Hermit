@@ -1,0 +1,6 @@
+# cargo-clippy 配置：这里只放"阈值/行为"类设置。
+# lint 的启用与等级（unwrap_used、pedantic 等）在 Cargo.toml 的 [workspace.lints] 里配置。
+
+avoid-breaking-exported-api = false
+too-many-arguments-threshold = 8
+type-complexity-threshold = 300

@@ -1,0 +1,73 @@
+# ── 依赖与构建产物 ──
+target/
+node_modules/
+kg-app/src-ui/dist/
+kg-app/gen/
+
+# ── 本地备份与工具文件 ──
+.backup/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# 数据库文件
+*.db
+*.db-shm
+*.db-wal
+
+# ── Tauri / 工具本地文件 ──
+.claude/worktrees/
+.claude/settings.local.json
+
+# ── 早期结构遗留代码（不属于 workspace，内含 4.4MB 编译产物） ──
+/src/
+
+# ── 测试产物 ──
+qr.png
+qr_login.png
+
+# ── 开发过程报告（保留在磁盘，不入库） ──
+/COMPILE_FIX_SUMMARY.md
+/DELIVERY_SUMMARY.md
+/DESIGN_CONSISTENCY_REPORT.md
+/DESIGN_STANDARD_VERIFICATION.md
+/FINAL_COMPLETION_REPORT.md
+/FINAL_REPORT.md
+/FINAL_STATUS.md
+/FRONTEND_TEST_REPORT.md
+/IMPLEMENTATION_LOG.md
+/INTEGRATION_STATUS.md
+/M0-REPORT.md
+/M1-REPORT.md
+/M2-REPORT.md
+/M3-REPORT.md
+/M4-PLAN.md
+/M4-PROGRESS.md
+/M4-REPORT.md
+/M4-STATUS.md
+/NEW_UI_INTEGRATION_COMPLETE.md
+/OVERALL_PROGRESS.md
+/PHASE1_COMPLETE.md
+/PHASE2_COMPLETE.md
+/PHASE2_LOG.md
+/PHASE2_PROGRESS.md
+/PROGRESS_REPORT.md
+/PROJECT_COMPLETE_SUMMARY.md
+/PROJECT_SUMMARY.md
+/QUICKSTART_TEST.md
+/README_FINAL.md
+/README_UI_INTEGRATION.md
+/START.md
+/STATUS.md
+/SUCCESS.md
+/UI_IMPLEMENTATION_PLAN.md
+/UI_INTEGRATION_COMPLETE.md
+/UI_INTEGRATION_STATUS.md
+/QUICK_REFERENCE.txt
+/START_HERE.txt
+/TESTING_NOW.txt
+/UI_INTEGRATION_SUMMARY.txt
+/UI_READY_REPORT.txt

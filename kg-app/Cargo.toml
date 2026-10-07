@@ -1,0 +1,52 @@
+[package]
+name = "kg-app"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "kgplayer"
+path = "src/main.rs"
+
+[dependencies]
+kg-core.workspace = true
+kg-audio.workspace = true
+kg-providers.workspace = true
+kg-lyrics.workspace = true
+kg-store.workspace = true
+kg-mpris.workspace = true
+
+# 直接声明（不走 workspace 继承），让 `cargo tauri build` 能自动加上
+# custom-protocol —— 否则 release 包会继续指向 devUrl。
+tauri = { version = "2.1", features = ["tray-icon"] }
+tauri-plugin-shell.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+uuid.workspace = true
+directories.workspace = true
+gstreamer.workspace = true
+once_cell = "1.20"
+
+[target.'cfg(target_os = "linux")'.dependencies]
+oo7.workspace = true
+
+[features]
+# 漏掉 kugou 时构建照样成功，只是运行时才报「Kugou feature not enabled」，
+# 在线搜索/每日推荐/播放全部失效 —— 这种静默降级比编译失败难查得多。
+#
+# 注意 `cargo tauri build` 会传 `--no-default-features`，所以只把 kugou 放进
+# default 保护不了发布构建；这里让 custom-protocol（发布构建必开）蕴含 kugou，
+# 任何发布构建都会带上它。
+default = ["custom-protocol", "kugou"]
+custom-protocol = ["tauri/custom-protocol", "kugou"]
+kugou = ["kg-providers/kugou"]
+
+[build-dependencies]
+tauri-build = { version = "2.0", features = [] }
+
+[lints]
+workspace = true

@@ -1,0 +1,15 @@
+[package]
+name = "kg-mpris"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+kg-core.workspace = true
+zbus.workspace = true
+tokio.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+
+[lints]
+workspace = true

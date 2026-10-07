@@ -1,0 +1,103 @@
+[workspace]
+members = [
+    "kg-core",
+    "kg-audio",
+    "kg-providers",
+    "kg-lyrics",
+    "kg-store",
+    "kg-mpris",
+    "kg-app",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "GPL-3.0-or-later"
+authors = ["kgplayer contributors"]
+
+[workspace.dependencies]
+# Internal crates
+kg-core = { path = "kg-core" }
+kg-audio = { path = "kg-audio" }
+kg-providers = { path = "kg-providers" }
+kg-lyrics = { path = "kg-lyrics" }
+kg-store = { path = "kg-store" }
+kg-mpris = { path = "kg-mpris" }
+
+# Common dependencies
+tokio = { version = "1.41", features = ["rt-multi-thread", "macros", "sync", "time", "fs"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "2.0"
+anyhow = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Async
+async-trait = "0.1"
+
+# UUID
+uuid = { version = "1.11", features = ["v4", "serde"] }
+
+# Random (lightweight, no getrandom)
+fastrand = "2.2"
+
+# HTTP client
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "json"] }
+
+# GStreamer
+gstreamer = "0.23"
+gstreamer-player = "0.23"
+glib = "0.20"
+
+# Tauri
+#
+# 注意：`tauri` 故意不在 workspace 里声明，而是写死在 kg-app 中。
+# 用 workspace 继承时，`cargo tauri build` 无法改写它的 feature 集合
+# （CLI 会提示 "features array won't be automatically rewritten"），
+# 于是 custom-protocol 不会被启用 —— 打出来的 release 包仍然指向 devUrl，
+# 装上后打开就是 "Could not connect to localhost"。
+tauri-plugin-shell = "2.0"
+
+# Database
+rusqlite = { version = "0.32", features = ["bundled", "backup"] }
+
+# File operations
+walkdir = "2.5"
+notify = "7.0"
+lofty = "0.22"
+
+# D-Bus (Linux only)
+zbus = "4.4"
+
+# System integration
+directories = "5.0"
+oo7 = "0.3"
+
+# Parsing
+nom = "7.1"
+
+# Kugou SDK (from existing code)
+kugou_sdk = "0.2"
+
+# lint 策略。各成员 crate 通过 `[lints] workspace = true` 继承。
+# 这里用 warn 而不是 deny：本地 `cargo build` 不被噪音打断，
+# 而 CI 用 `cargo clippy -- -D warnings` 把它们提升为硬性失败。
+[workspace.lints.rust]
+unsafe_code = "warn"
+
+[workspace.lints.clippy]
+# 安全红线：业务代码不得 panic / 不得吞掉错误
+unwrap_used = "warn"
+expect_used = "warn"
+panic = "warn"
+dbg_macro = "warn"
+todo = "warn"
+unimplemented = "warn"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true

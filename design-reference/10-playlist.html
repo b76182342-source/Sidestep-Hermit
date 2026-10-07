@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<title>KGPlayer 歌单</title>
+<script src="092bd39f-98de-4417-a563-7e07597aa883"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}button{font-family:inherit}
+.nav{display:block;width:100%;text-align:left;padding:0 14px;height:40px;border:0;background:transparent;color:#5F5E58;font-size:14px;border-radius:10px;cursor:pointer}
+.nav.on{background:#E4E1D5;color:#141413;font-weight:600}
+.h{font-size:12px;color:#5F5E58;padding:0 14px;margin:24px 0 8px}
+.sub{font-size:12px;color:#5F5E58}
+.serif{font-family:'Noto Serif CJK SC','Source Han Serif SC','Songti SC',Georgia,serif}
+.ib{width:44px;height:44px;border:0;background:transparent;color:#141413;display:grid;place-items:center;border-radius:22px;cursor:pointer}
+.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.chip{height:40px;padding:0 20px;border:1px solid #DDD9CB;border-radius:20px;background:#fff;color:#141413;font-size:14px;cursor:pointer}
+.row{display:grid;grid-template-columns:40px 1fr 200px 64px;align-items:center;height:52px;padding:0 14px;border-radius:12px;font-size:14px}
+.row.on{background:#EFEDE4}
+.t{display:flex;gap:12px;align-items:center}
+.cv{width:36px;height:36px;border-radius:8px;flex:none}
+</style>
+</helmet>
+<div style="width:1280px;height:800px;display:grid;grid-template-columns:220px 1fr;grid-template-rows:1fr 88px;background:#FAF9F5;color:#141413;font-family:'Noto Sans CJK SC','Noto Sans SC','PingFang SC','Microsoft YaHei',system-ui,sans-serif;overflow:hidden">
+
+<aside style="background:#F0EEE6;padding:24px 12px;display:flex;flex-direction:column;box-sizing:border-box">
+<div class="serif" style="font-size:22px;font-weight:500;padding:0 14px 24px">KGPlayer</div>
+<button class="nav">全部歌曲</button><button class="nav">专辑</button><button class="nav">艺术家</button>
+<div class="h">歌单</div>
+<button class="nav">我喜欢</button><button class="nav on">通勤</button><button class="nav">深夜</button>
+<div style="flex:1"></div>
+<button class="nav">扫描音乐库</button><button class="nav">设置</button>
+</aside>
+
+<main style="padding:32px 32px 0;box-sizing:border-box;overflow:hidden">
+<div style="display:flex;gap:28px;align-items:flex-end;padding:0 14px">
+<div style="width:176px;height:176px;border-radius:16px;background:#C8CFBF;flex:none"></div>
+<div>
+<div class="sub">云端歌单</div>
+<h1 class="serif" style="margin:4px 0 6px;font-size:40px;font-weight:500">通勤</h1>
+<div class="sub" style="margin-bottom:20px">7 首 · 示例用户创建</div>
+<div style="display:flex;gap:10px"><button style="height:40px;padding:0 28px;border:0;border-radius:20px;background:#B85537;color:#fff;font-size:14px;font-weight:600;cursor:pointer">播放全部</button><button class="chip">随机播放</button><button class="chip">编辑歌单</button></div>
+</div>
+</div>
+<div style="margin-top:28px">
+<div class="row" style="height:36px;color:#5F5E58;font-size:12px;border-bottom:1px solid #E3E0D4;border-radius:0"><span>#</span><span>标题</span><span>专辑</span><span>时长</span></div>
+<div class="row"><span class="sub">1</span><div class="t"><div class="cv" style="background:#C8CFBF"></div><div><div>远山</div><div class="sub">周野</div></div></div><span class="sub">远行</span><span class="sub">4:51</span></div>
+<div class="row on"><svg width="14" height="14" sc-camel-view-box="0 0 14 14" fill="#9E4326"><rect x="1" y="5" width="3" height="8" rx="1"></rect><rect x="5.5" y="1" width="3" height="12" rx="1"></rect><rect x="10" y="7" width="3" height="6" rx="1"></rect></svg><div class="t"><div class="cv" style="background:#D9B79D"></div><div><div style="color:#9E4326;font-weight:600">灯火阑珊</div><div class="sub">白河</div></div></div><span class="sub">旧街</span><span class="sub">4:05</span></div>
+<div class="row"><span class="sub">3</span><div class="t"><div class="cv" style="background:#CFC6D8"></div><div><div>晨光</div><div class="sub">小满</div></div></div><span class="sub">日常</span><span class="sub">2:58</span></div>
+<div class="row"><span class="sub">4</span><div class="t"><div class="cv" style="background:#E3C9B6"></div><div><div>回声</div><div class="sub">林间</div></div></div><span class="sub">潮汐之间</span><span class="sub">3:18</span></div>
+<div class="row"><span class="sub">5</span><div class="t"><div class="cv" style="background:#C8CFBF"></div><div><div>慢车</div><div class="sub">周野</div></div></div><span class="sub">远行</span><span class="sub">5:02</span></div>
+</div>
+</main>
+
+<footer style="grid-column:1 / -1;background:#F5F4ED;border-top:1px solid #E3E0D4;display:grid;grid-template-columns:1fr 560px 1fr;align-items:center;padding:0 24px;box-sizing:border-box">
+<div style="display:flex;gap:12px;align-items:center"><div style="width:56px;height:56px;border-radius:10px;background:#D9B79D"></div><div><div style="font-size:14px;font-weight:600">灯火阑珊</div><div class="sub">白河</div></div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+<div style="display:flex;align-items:center;gap:8px">
+<button class="ib" aria-label="随机播放" style="color:#5F5E58"><svg class="i" width="20" height="20" sc-camel-view-box="0 0 24 24"><path d="M16 4h4v4M4 20L20 4M20 16v4h-4M4 4l5 5M15 15l5 5"></path></svg></button>
+<button class="ib" aria-label="上一首"><svg class="i" width="22" height="22" sc-camel-view-box="0 0 24 24" style="fill:currentColor"><path d="M18 5v14l-9-7zM6 5v14"></path></svg></button>
+<button class="ib" aria-label="暂停" style="width:48px;height:48px;border-radius:24px;background:#B85537;color:#fff"><svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="currentColor"><path d="M7 5h3v14H7zM14 5h3v14h-3z"></path></svg></button>
+<button class="ib" aria-label="下一首"><svg class="i" width="22" height="22" sc-camel-view-box="0 0 24 24" style="fill:currentColor"><path d="M6 5v14l9-7zM18 5v14"></path></svg></button>
+<button class="ib" aria-label="循环模式" style="color:#5F5E58"><svg class="i" width="20" height="20" sc-camel-view-box="0 0 24 24"><path d="M17 2l4 4-4 4M3 11V9a3 3 0 013-3h15M7 22l-4-4 4-4M21 13v2a3 3 0 01-3 3H3"></path></svg></button>
+</div>
+<div style="display:flex;align-items:center;gap:12px;width:100%"><span class="sub" style="width:36px;text-align:right">1:38</span><div style="flex:1;height:4px;background:#E3E0D4;border-radius:2px"><div style="width:40%;height:4px;background:#B85537;border-radius:2px"></div></div><span class="sub" style="width:36px">4:05</span></div>
+</div>
+<div style="display:flex;align-items:center;justify-content:flex-end;gap:8px">
+<button class="ib" aria-label="播放队列"><svg class="i" width="20" height="20" sc-camel-view-box="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"></path></svg></button>
+<svg class="i" width="20" height="20" sc-camel-view-box="0 0 24 24" style="color:#5F5E58"><path d="M4 9v6h4l5 4V5L8 9zM16 9a4 4 0 010 6"></path></svg>
+<div style="width:100px;height:4px;background:#E3E0D4;border-radius:2px"><div style="width:70%;height:4px;background:#141413;border-radius:2px"></div></div>
+</div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:800}}">
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+
+
+</body></html>

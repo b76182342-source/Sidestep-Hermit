@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<title>KGPlayer 个人管理</title>
+<script src="0e6740bc-5109-4396-b867-35470f6a3a27"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}button{font-family:inherit}
+.nav{display:block;width:100%;text-align:left;padding:0 14px;height:40px;border:0;background:transparent;color:#5F5E58;font-size:14px;border-radius:10px;cursor:pointer}
+.nav.on{background:#E4E1D5;color:#141413;font-weight:600}
+.h{font-size:12px;color:#5F5E58;padding:0 14px;margin:24px 0 8px}
+.sub{font-size:12px;color:#5F5E58}
+.serif{font-family:'Noto Serif CJK SC','Source Han Serif SC','Songti SC',Georgia,serif}
+.ib{width:44px;height:44px;border:0;background:transparent;color:#141413;display:grid;place-items:center;border-radius:22px;cursor:pointer}
+.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.chip{height:36px;padding:0 16px;border:1px solid #DDD9CB;border-radius:18px;background:#fff;color:#141413;font-size:13px;cursor:pointer;white-space:nowrap}
+.card{background:#F5F4ED;border:1px solid #E3E0D4;border-radius:20px;padding:20px}
+.set{display:flex;justify-content:space-between;align-items:center;height:52px;font-size:14px}
+.lb{display:block;font-size:12px;color:#5F5E58;margin:16px 0 8px}
+.in{width:100%;height:44px;box-sizing:border-box;padding:0 14px;border:1px solid #DDD9CB;border-radius:12px;background:#fff;color:#141413;font-size:14px;font-family:inherit;outline:0}
+.dev{display:flex;justify-content:space-between;align-items:center;height:52px;font-size:14px;border-top:1px solid #E3E0D4}
+</style>
+</helmet>
+<div style="width:1280px;height:800px;display:grid;grid-template-columns:220px 1fr;grid-template-rows:1fr 88px;background:#FAF9F5;color:#141413;font-family:'Noto Sans CJK SC','Noto Sans SC','PingFang SC','Microsoft YaHei',system-ui,sans-serif;overflow:hidden">
+
+<aside style="background:#F0EEE6;padding:24px 12px;display:flex;flex-direction:column;box-sizing:border-box">
+<div class="serif" style="font-size:22px;font-weight:500;padding:0 14px 24px">KGPlayer</div>
+<button class="nav">首页</button><button class="nav">每日推荐</button><button class="nav">播放历史</button>
+<div class="h">云端歌单</div>
+<button class="nav">我喜欢</button><button class="nav">通勤</button><button class="nav">深夜</button>
+<div style="flex:1"></div>
+<button class="nav">设置</button>
+<button class="nav on" style="display:flex;align-items:center;gap:10px;height:48px"><span class="serif" style="width:28px;height:28px;border-radius:14px;background:#D9B79D;display:grid;place-items:center;font-size:14px">示</span>示例用户</button>
+</aside>
+
+<main style="padding:32px 32px 0;box-sizing:border-box;overflow:hidden">
+<h1 class="serif" style="margin:0 14px 24px;font-size:32px;font-weight:500">个人管理</h1>
+<div style="display:grid;grid-template-columns:180px 1fr;gap:24px">
+<nav style="display:flex;flex-direction:column;gap:4px">
+<button class="nav on">资料与账号</button><button class="nav">数据与备份</button>
+</nav>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
+
+<div class="card">
+<h2 class="serif" style="margin:0 0 16px;font-size:20px;font-weight:500">编辑资料</h2>
+<div style="display:flex;align-items:center;gap:16px">
+<div class="serif" style="width:72px;height:72px;border-radius:36px;background:#D9B79D;display:grid;place-items:center;font-size:30px">示</div>
+<div><button class="chip">更换头像</button><div class="sub" style="margin-top:6px">支持 PNG、JPG</div></div>
+</div>
+<label class="lb" for="nick">昵称</label><input id="nick" class="in" value="示例用户">
+<label class="lb" for="bio">简介</label><input id="bio" class="in" placeholder="写点什么吧">
+<div style="display:flex;gap:10px;margin-top:24px">
+<button style="height:40px;padding:0 28px;border:0;border-radius:20px;background:#B85537;color:#fff;font-size:14px;font-weight:600;cursor:pointer">保存</button>
+<button class="chip" style="height:40px;border-radius:20px">取消</button>
+</div>
+</div>
+
+<div class="card">
+<h2 class="serif" style="margin:0 0 4px;font-size:20px;font-weight:500">账号与安全</h2>
+<div class="set"><span>手机号</span><div style="display:flex;align-items:center;gap:12px"><span class="sub">138****0000</span><button class="chip">更换</button></div></div>
+<div class="set" style="border-top:1px solid #E3E0D4"><span>登录方式</span><span class="sub">手机验证码</span></div>
+<div class="h" style="padding:0;margin:16px 0 0">已登录设备</div>
+<div class="dev" style="margin-top:8px"><div><div>这台电脑</div><div class="sub">Ubuntu 26.04</div></div><span style="height:24px;padding:0 10px;border-radius:12px;background:#EBD3C3;color:#9E4326;font-size:12px;font-weight:600;display:grid;place-items:center">当前</span></div>
+<div class="dev"><div><div>手机</div><div class="sub">Android</div></div><button class="chip">退出</button></div>
+<div class="dev"><div><div>平板</div><div class="sub">iPadOS</div></div><button class="chip">退出</button></div>
+<button class="chip" style="width:100%;margin-top:16px;height:40px;border-radius:20px">退出所有其他设备</button>
+</div>
+
+</div>
+</div>
+</main>
+
+<footer style="grid-column:1 / -1;background:#F5F4ED;border-top:1px solid #E3E0D4;display:grid;grid-template-columns:1fr 560px 1fr;align-items:center;padding:0 24px;box-sizing:border-box">
+<div style="display:flex;gap:12px;align-items:center"><div style="width:56px;height:56px;border-radius:10px;background:#D9B79D"></div><div><div style="font-size:14px;font-weight:600">灯火阑珊</div><div class="sub">白河</div></div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+<div style="display:flex;align-items:center;gap:8px">
+<button class="ib" aria-label="随机播放" style="color:#5F5E58"><svg class="i" width="20" height="20" sc-camel-view-box="0 0 24 24"><path d="M16 4h4v4M4 20L20 4M20 16v4h-4M4 4l5 5M15 15l5 5"></path></svg></button>
+<button class="ib" aria-label="上一首"><svg class="i" width="22" height="22" sc-camel-view-box="0 0 24 24" style="fill:currentColor"><path d="M18 5v14l-9-7zM6 5v14"></path></svg></button>
+<button class="ib" aria-label="暂停" style="width:48px;height:48px;border-radius:24px;background:#B85537;color:#fff"><svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="currentColor"><path d="M7 5h3v14H7zM14 5h3v14h-3z"></path></svg></button>
+<button class="ib" aria-label="下一首"><svg class="i" width="22" height="22" sc-camel-view-box="0 0 24 24" style="fill:currentColor"><path d="M6 5v14l9-7zM18 5v14"></path></svg></button>
+<button class="ib" aria-label="循环模式" style="color:#5F5E58"><svg class="i" width="20" height="20" sc-camel-view-box="0 0 24 24"><path d="M17 2l4 4-4 4M3 11V9a3 3 0 013-3h15M7 22l-4-4 4-4M21 13v2a3 3 0 01-3 3H3"></path></svg></button>
+</div>
+<div style="display:flex;align-items:center;gap:12px;width:100%"><span class="sub" style="width:36px;text-align:right">1:38</span><div style="flex:1;height:4px;background:#E3E0D4;border-radius:2px"><div style="width:40%;height:4px;background:#B85537;border-radius:2px"></div></div><span class="sub" style="width:36px">4:05</span></div>
+</div>
+<div style="display:flex;align-items:center;justify-content:flex-end;gap:8px">
+<button class="ib" aria-label="播放队列"><svg class="i" width="20" height="20" sc-camel-view-box="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"></path></svg></button>
+<svg class="i" width="20" height="20" sc-camel-view-box="0 0 24 24" style="color:#5F5E58"><path d="M4 9v6h4l5 4V5L8 9zM16 9a4 4 0 010 6"></path></svg>
+<div style="width:100px;height:4px;background:#E3E0D4;border-radius:2px"><div style="width:70%;height:4px;background:#141413;border-radius:2px"></div></div>
+</div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:800}}">
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+
+
+</body></html>
