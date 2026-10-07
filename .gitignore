@@ -71,3 +71,12 @@ qr_login.png
 /TESTING_NOW.txt
 /UI_INTEGRATION_SUMMARY.txt
 /UI_READY_REPORT.txt
+
+# ── 过程报告（子目录，同样只留在磁盘） ──
+/kg-app/src-ui/FINAL_DELIVERY_REPORT.md
+/kg-app/src-ui/M4-FINAL.md
+/kg-app/src-ui/M5-PLAN.md
+/kg-app/src-ui/PROJECT_COMPLETE.md
+/kg-app/src-ui/TESTING.md
+/kg-app/src-ui/UI_INTEGRATION_PLAN.md
+
