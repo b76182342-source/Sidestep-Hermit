@@ -76,6 +76,27 @@ GitHub Actions 检查：fmt、clippy、test、deny
   主要是 WebKit + GTK 的固定开销，需用 1 万首曲库实测才能判定是否真超标。
 - `Queue` 的随机播放不记播放历史（`fastrand` 直接随机，可能短期内重复）。
 
+## 构建与运行
+
+```bash
+# 开发：必须带 --features kugou
+cargo tauri dev --features kugou
+
+# 发布：不用带任何 feature
+cargo tauri build --bundles deb,appimage
+```
+
+**开发命令为什么要显式带 `--features kugou`**：`cargo tauri dev` 会传
+`--no-default-features`，`default` 里的 kugou 因此不生效；而 `custom-protocol`
+（开发者不启用）蕴含的 kugou 也不会生效。漏掉就得到一个没有在线功能的
+dev 构建，界面上只会在调用时冒出一句「Kugou feature not enabled」。
+
+发布构建反过来：`custom-protocol` 必开且蕴含 `kugou`，所以不需要额外参数。
+
+开发构建的窗口标题会显示 `KGPlayer (dev · 需要 Vite)`，发布构建才是干净的
+`KGPlayer`；两者界面差异极大（dev 需要 Vite 在跑，否则白屏报错），
+认标题可以少走弯路。
+
 ## 坑：`tauri` 依赖不能走 workspace 继承
 
 `tauri` 必须在 `kg-app/Cargo.toml` 里**直接声明**，不能写
