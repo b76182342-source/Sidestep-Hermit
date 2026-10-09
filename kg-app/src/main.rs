@@ -73,7 +73,7 @@ pub struct AppState {
 pub fn run() {
     if let Err(err) = run_inner() {
         // 日志可能还没初始化成功，所以同时写 stderr
-        eprintln!("KGPlayer 启动失败: {err}");
+        eprintln!("Sidestep Hermit 启动失败: {err}");
         std::process::exit(1);
     }
 }
@@ -87,7 +87,7 @@ fn run_inner() -> Result<(), Box<dyn std::error::Error>> {
         )
         .init();
 
-    info!("Starting KGPlayer with Tauri");
+    info!("Starting Sidestep Hermit with Tauri");
 
     // 初始化 GStreamer
     gstreamer::init()?;
@@ -193,7 +193,7 @@ fn run_inner() -> Result<(), Box<dyn std::error::Error>> {
             // 两者界面完全不同（一个连不上就是白屏报错），标题里标出来免得混淆。
             #[cfg(dev)]
             if let Some(window) = app.get_webview_window("main") {
-                let _ = window.set_title("KGPlayer (dev · 需要 Vite)");
+                let _ = window.set_title("Sidestep Hermit (dev · 需要 Vite)");
             }
 
             // 系统托盘（缺失时只告警）

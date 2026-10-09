@@ -1,4 +1,4 @@
-# KGPlayer (Sidestep Hermit)
+# Sidestep Hermit
 
 <div align="center">
 

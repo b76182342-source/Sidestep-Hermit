@@ -68,7 +68,7 @@ export default function Sidebar({
 
   return (
     <aside className="app-sidebar">
-      <div className="sidebar-logo">KGPlayer</div>
+      <div className="sidebar-logo">Sidestep Hermit</div>
 
       {primary.map((item) => renderNav(item.key, item.label))}
 

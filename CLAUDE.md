@@ -40,7 +40,7 @@ cargo tauri build --features kugou
 
 安装 `.deb` 包后，应用会自动注册到 Linux 系统：
 
-1. **应用菜单** - 可从应用启动器搜索 "Sidestep Hermit" 或 "KGPlayer"
+1. **应用菜单** - 可从应用启动器搜索 "Sidestep Hermit"
 2. **桌面文件** - 安装到 `/usr/share/applications/`
 3. **可执行文件** - 安装到 `/usr/bin/` 或 `/opt/`
 4. **图标** - 安装到 `/usr/share/icons/`
@@ -200,8 +200,8 @@ dev 构建，界面上只会在调用时冒出一句「Kugou feature not enabled
 
 发布构建反过来：`custom-protocol` 必开且蕴含 `kugou`，所以不需要额外参数。
 
-开发构建的窗口标题会显示 `KGPlayer (dev · 需要 Vite)`，发布构建才是干净的
-`KGPlayer`；两者界面差异极大（dev 需要 Vite 在跑，否则白屏报错），
+开发构建的窗口标题会显示 `Sidestep Hermit (dev · 需要 Vite)`，发布构建才是干净的
+`Sidestep Hermit`；两者界面差异极大（dev 需要 Vite 在跑，否则白屏报错），
 认标题可以少走弯路。
 
 ## 坑：`tauri` 依赖不能走 workspace 继承

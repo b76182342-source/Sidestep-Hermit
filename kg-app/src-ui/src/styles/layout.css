@@ -62,7 +62,9 @@
   background: var(--bg-panel);
   border-left: 1px solid var(--border);
   padding: 24px;
-  overflow-y: auto;
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ── 播放器栏 ── */

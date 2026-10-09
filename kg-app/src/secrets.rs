@@ -9,7 +9,7 @@ mod backend {
     use std::collections::HashMap;
 
     /// 密钥环条目标签（用户可见）
-    const LABEL: &str = "KGPlayer 酷狗登录凭据";
+    const LABEL: &str = "Sidestep Hermit 酷狗登录凭据";
 
     fn attributes() -> HashMap<&'static str, &'static str> {
         HashMap::from([("service", "com.kgplayer.app"), ("account", "kugou")])
