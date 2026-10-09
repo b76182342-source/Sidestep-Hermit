@@ -103,7 +103,13 @@ export default function Albums({ activeKey, onPlay, reloadToken }: AlbumsProps) 
               onDoubleClick={() => onPlay(album.songs, 0)}
               title="双击播放整张专辑"
             >
-              <div className="ac" style={{ background: coverColor(album.name) }}>
+              <div
+                className="ac"
+                style={{
+                  background: `url(/mascots/mascot-mustache.png) center/contain no-repeat`,
+                  imageRendering: 'pixelated'
+                }}
+              >
                 {playingAlbumName === album.name && (
                   <button
                     className="pl"

@@ -96,25 +96,10 @@ export default function NowPlaying({ onClose }: NowPlayingProps) {
           style={{
             background: current.artworkUrl
               ? `url(${current.artworkUrl}) center/cover no-repeat`
-              : coverColor(current.album || current.title),
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
+              : `url(/mascots/mascot-typing.png) center/contain no-repeat`,
+            imageRendering: 'pixelated'
           }}
         >
-          {!current.artworkUrl && (
-            <img
-              src="/mascots/mascot-typing.png"
-              alt="Music"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                imageRendering: 'pixelated',
-                opacity: 0.9
-              }}
-            />
-          )}
         </div>
 
         <div className="np-title">{current.title}</div>

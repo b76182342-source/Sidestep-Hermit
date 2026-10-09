@@ -50,7 +50,7 @@ pub fn setup(app: &AppHandle) -> tauri::Result<()> {
     let toggle = MenuItem::with_id(app, "toggle", "播放 / 暂停", true, None::<&str>)?;
     let prev = MenuItem::with_id(app, "prev", "上一首", true, None::<&str>)?;
     let next = MenuItem::with_id(app, "next", "下一首", true, None::<&str>)?;
-    let quit = MenuItem::with_id(app, "quit", "退出 KGPlayer", true, None::<&str>)?;
+    let quit = MenuItem::with_id(app, "quit", "退出 Sidestep Hermit", true, None::<&str>)?;
 
     let menu = Menu::with_items(
         app,
@@ -140,7 +140,7 @@ pub fn setup(app: &AppHandle) -> tauri::Result<()> {
     }
 }
 
-/// 拦截关窗：默认收起窗口而不是退出，退出走托盘的「退出 KGPlayer」。
+/// 拦截关窗：默认收起窗口而不是退出，退出走托盘的「退出 Sidestep Hermit」。
 pub fn handle_close_requested(window: &tauri::Window) {
     let _ = window.hide();
 }

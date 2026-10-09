@@ -32,7 +32,7 @@
           "gstreamer1.0-plugins-ugly",
           "gstreamer1.0-libav"
         ],
-        "desktopTemplate": "linux/kgplayer.desktop.hbs"
+        "desktopTemplate": "linux/sidestep-hermit.desktop.hbs"
       }
     }
   },

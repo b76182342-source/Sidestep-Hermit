@@ -46,25 +46,10 @@ export default function NowPlayingPanel() {
         style={{
           background: current.artworkUrl
             ? `url(${current.artworkUrl}) center/cover no-repeat`
-            : coverColor(current.album || current.title),
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
+            : `url(/mascots/mascot-mustache.png) center/contain no-repeat`,
+          imageRendering: 'pixelated'
         }}
       >
-        {!current.artworkUrl && (
-          <img
-            src="/mascots/mascot-mustache.png"
-            alt="Music"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              imageRendering: 'pixelated',
-              opacity: 0.8
-            }}
-          />
-        )}
       </div>
 
       <div className="np-panel-title">{current.title}</div>
