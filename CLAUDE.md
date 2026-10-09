@@ -8,6 +8,66 @@
 
 4. **只播放用户有权播放的内容**。
 
+# Git 工作流
+
+**重要：本项目只使用主分支（main），不创建任何其他分支。**
+
+所有开发、修复和功能更新都直接提交到 main 分支：
+
+```bash
+# 提交更改
+git add .
+git commit -m "feat: 描述更改内容"
+git push origin main
+```
+
+不要使用 `git checkout -b` 创建新分支，也不要使用 worktree。所有工作都在主分支上进行。
+
+# 打包与系统集成
+
+## 构建发布包
+
+```bash
+cd kg-app
+cargo tauri build --features kugou
+```
+
+生成的安装包位置：
+- **Debian/Ubuntu**: `target/release/bundle/deb/Sidestep Hermit_VERSION_amd64.deb`
+- **AppImage**: `target/release/bundle/appimage/` (如果启用)
+
+## 系统集成
+
+安装 `.deb` 包后，应用会自动注册到 Linux 系统：
+
+1. **应用菜单** - 可从应用启动器搜索 "Sidestep Hermit" 或 "KGPlayer"
+2. **桌面文件** - 安装到 `/usr/share/applications/`
+3. **可执行文件** - 安装到 `/usr/bin/` 或 `/opt/`
+4. **图标** - 安装到 `/usr/share/icons/`
+
+### 验证安装
+
+```bash
+# 检查是否已安装
+dpkg -l | grep -i hermit
+
+# 查找可执行文件
+which kgplayer
+
+# 从终端启动
+kgplayer  # 或 sidestep-hermit
+```
+
+### 卸载
+
+```bash
+sudo dpkg -r sidestep-hermit
+# 或
+sudo apt remove sidestep-hermit
+```
+
+Tauri 的 bundler 会自动创建 `.desktop` 文件并注册到系统，无需手动配置。
+
 # 架构决策
 
 ## 技术栈
