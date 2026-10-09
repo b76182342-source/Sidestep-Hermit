@@ -46,6 +46,15 @@ impl Player {
             Some(PlayerGMainContextSignalDispatcher::new(None)),
         );
 
+        // 配置位置更新间隔（每 100 毫秒更新一次）
+        let mut config = gst_player.config();
+        config.set_position_update_interval(100);
+        if let Err(e) = gst_player.set_config(config) {
+            eprintln!("[Player] Failed to set config: {}", e);
+            return Err(format!("Failed to set player config: {}", e));
+        }
+        eprintln!("[Player] Position update interval set to 100ms");
+
         let (event_tx, event_rx) = mpsc::unbounded_channel();
 
         let inner = Arc::new(Mutex::new(PlayerInner {
@@ -79,11 +88,35 @@ impl Player {
 
         let event_tx_clone = event_tx.clone();
         gst_player.connect_position_updated(move |player, pos| {
+            eprintln!("[Player] position_updated signal received, pos={:?}", pos);
             if let Some(pos) = pos {
+                // 保持纳秒，由上层转换为秒
                 let position = pos.nseconds();
-                let duration = player.duration().map(|d| d.nseconds()).unwrap_or(0);
+                let duration = player.duration()
+                    .map(|d| d.nseconds())
+                    .unwrap_or(0);
 
+                eprintln!("[Player] Sending PositionChanged: {} ns / {} ns", position, duration);
                 let _ = event_tx_clone.send(PlayerEvent::PositionChanged { position, duration });
+            }
+        });
+
+        // 备用方案：由于 gstreamer-player 已被弃用，position_updated 信号可能不工作
+        // 使用定时器主动查询位置
+        let gst_player_clone = gst_player.clone();
+        let event_tx_clone = event_tx.clone();
+        std::thread::spawn(move || {
+            loop {
+                std::thread::sleep(std::time::Duration::from_millis(100));
+
+                if let Some(pos) = gst_player_clone.position() {
+                    let position = pos.nseconds();
+                    let duration = gst_player_clone.duration()
+                        .map(|d| d.nseconds())
+                        .unwrap_or(0);
+
+                    let _ = event_tx_clone.send(PlayerEvent::PositionChanged { position, duration });
+                }
             }
         });
 

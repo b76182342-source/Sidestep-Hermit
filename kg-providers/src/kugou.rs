@@ -32,6 +32,7 @@ pub struct AccountInfo {
 
 /// 搜索结果条目（对前端可见）。
 #[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct SearchHit {
     /// 播放时回传给后端的资源标识
     pub hash: String,
@@ -46,12 +47,26 @@ pub struct SearchHit {
 
 /// 一行歌词（对前端可见）。
 #[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct LyricLineDto {
     /// 相对歌曲开头的起始时间（毫秒）
     pub time_ms: u64,
     pub duration_ms: u64,
     pub text: String,
     pub translation: Option<String>,
+    /// 逐字时间戳（KRC 格式支持）
+    #[serde(skip_serializing_if = "Vec::is_empty", default)]
+    pub words: Vec<LyricWordDto>,
+}
+
+/// 逐字歌词时间戳
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct LyricWordDto {
+    /// 相对于行开始的偏移（毫秒）
+    pub start_ms: u64,
+    pub duration_ms: u64,
+    pub text: String,
 }
 
 /// 播放地址结果。
@@ -250,8 +265,6 @@ impl KugouAuth {
             .map_err(|e| Error::Provider(e.to_string()))?;
 
         let hits = self.collect(resp.data.items);
-
-        debug!("酷狗搜索 “{}” 命中 {} 条", keyword, hits.len());
         Ok(hits)
     }
 
@@ -309,6 +322,42 @@ impl KugouAuth {
         Ok(self.collect(resp.data.items))
     }
 
+    /// 我喜欢的歌曲（系统默认收藏歌单）。
+    pub async fn liked_songs(&mut self) -> Result<Vec<SearchHit>> {
+        use kugou_sdk::Pagination;
+
+        // 1. 获取用户歌单列表，找到"我喜欢"
+        let playlists_resp = self
+            .client
+            .users()
+            .playlists(&mut self.session, Pagination::new(1, 50))
+            .await
+            .map_err(|e| Error::Provider(e.to_string()))?;
+
+        let my_fav = playlists_resp
+            .data
+            .items
+            .iter()
+            .find(|p| p.is_my_fav())
+            .ok_or_else(|| Error::NotFound("未找到我喜欢歌单".into()))?;
+
+        // 2. 获取 global_collection_id
+        let gid = my_fav
+            .global_collection_id
+            .as_ref()
+            .ok_or_else(|| Error::InvalidData("我喜欢歌单缺少 global_collection_id".into()))?;
+
+        // 3. 用 gid 获取曲目
+        let tracks_resp = self
+            .client
+            .playlists()
+            .tracks(&mut self.session, gid, Pagination::new(1, 200))
+            .await
+            .map_err(|e| Error::Provider(e.to_string()))?;
+
+        Ok(self.collect(tracks_resp.data.items))
+    }
+
     /// 取歌词（优先 KRC 逐字，取不到时回退 LRC）。
     pub async fn lyrics(&mut self, hash: &str) -> Result<Vec<LyricLineDto>> {
         let Some(song) = self.songs.get(hash).cloned() else {
@@ -344,6 +393,11 @@ impl KugouAuth {
                 duration_ms: l.duration_ms,
                 text: l.text,
                 translation: l.translation,
+                words: l.words.into_iter().map(|w| LyricWordDto {
+                    start_ms: w.start_ms,
+                    duration_ms: w.duration_ms,
+                    text: w.text,
+                }).collect(),
             })
             .collect())
     }
@@ -372,13 +426,16 @@ impl KugouAuth {
                 }
             };
 
+            // 暂时不设置封面，让前端在播放时从 track() 获取
+            let artwork_url = None;
+
             hits.push(SearchHit {
                 hash: hash.clone(),
                 title,
                 artist: song.singer.clone().unwrap_or_default(),
                 album: song.album.clone().unwrap_or_default(),
                 duration_secs: song.duration_secs.unwrap_or(0),
-                artwork_url: song.artwork_url.clone(),
+                artwork_url,
                 privilege: song.privilege,
             });
 
@@ -409,6 +466,26 @@ pub struct Song {
     pub singer_name: String,
     #[serde(rename = "filename", default)]
     pub filename: String,
+}
+
+impl Song {
+    /// 根据 hash 构造封面 URL（酷狗 CDN 规律）
+    pub fn artwork_url(&self) -> Option<String> {
+        if self.hash.is_empty() {
+            return None;
+        }
+        // 酷狗封面 URL 格式：singerHead400 目录
+        // 使用 hash 的前两位作为子目录
+        let hash_upper = self.hash.to_uppercase();
+        if hash_upper.len() < 2 {
+            return None;
+        }
+        let dir = &hash_upper[0..2];
+        Some(format!(
+            "https://imge.kugou.com/stdmusic/400/{}/{}.jpg",
+            dir, hash_upper
+        ))
+    }
 }
 
 #[derive(Debug, Clone, Deserialize)]

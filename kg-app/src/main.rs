@@ -258,6 +258,7 @@ fn run_inner() -> Result<(), Box<dyn std::error::Error>> {
             commands_kugou::kugou_session,
             commands_kugou::kugou_search,
             commands_kugou::kugou_daily,
+            commands_kugou::kugou_liked_songs,
             commands_kugou::kugou_lyrics,
             commands_kugou::kugou_play,
             commands_kugou::kugou_get_play_url,

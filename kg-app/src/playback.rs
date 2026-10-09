@@ -197,6 +197,17 @@ impl PlaybackCtx {
 
     /// 真正发指令给播放器并广播新状态。
     async fn start(&self, entry: &QueueEntry) -> Result<(), String> {
+        // 对于酷狗歌曲，尝试获取真实的封面 URL
+        #[cfg(feature = "kugou")]
+        if entry.provider == "kugou" && entry.artwork_url.is_none() {
+            if let Ok(artwork_url) = commands_kugou::get_artwork_url(&entry.id).await {
+                // 更新队列中的封面 URL
+                if let Ok(mut q) = self.queue.lock() {
+                    q.update_artwork(&entry.id, artwork_url);
+                }
+            }
+        }
+
         let source = match self.resolve(entry).await {
             Ok(source) => source,
             Err(e) => {

@@ -284,6 +284,16 @@
   font-weight: 600;
 }
 
+/* 逐字染色效果 */
+.np-lyric span {
+  transition: color 0.1s ease-out;
+}
+
+.np-lyric .word-active {
+  color: var(--accent-bright, #00d4ff);
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+}
+
 @media (max-width: 900px) {
   .pb-left {
     min-width: 0;

@@ -18,6 +18,9 @@ pub struct QueueEntry {
     pub album: String,
     /// 秒
     pub duration: u64,
+    /// 封面 URL
+    #[serde(default)]
+    pub artwork_url: Option<String>,
     /// 是否通过「下一首播放」插队进来的（队列抽屉里会标记）
     #[serde(default)]
     pub inserted: bool,
@@ -140,6 +143,15 @@ impl PlayQueue {
     pub fn clear(&mut self) {
         self.items.clear();
         self.index = None;
+    }
+
+    /// 更新指定歌曲的封面 URL
+    pub fn update_artwork(&mut self, id: &str, artwork_url: String) {
+        for item in &mut self.items {
+            if item.id == id {
+                item.artwork_url = Some(artwork_url.clone());
+            }
+        }
     }
 
     pub fn snapshot(&self) -> QueueSnapshot {

@@ -21,8 +21,8 @@ interface KugouHit {
   title: string
   artist: string
   album: string
-  duration_secs: number
-  artwork_url: string | null
+  durationSecs: number
+  artworkUrl: string | null
   privilege: number | null
 }
 
@@ -33,7 +33,8 @@ function toSong(hit: KugouHit): SongItem {
     title: hit.title,
     artist: hit.artist,
     album: hit.album,
-    duration: hit.duration_secs,
+    duration: hit.durationSecs,
+    artworkUrl: hit.artworkUrl || undefined,
   }
 }
 
@@ -113,6 +114,11 @@ export default function Daily({
           <span className="page-sub">酷狗 · 为你推荐</span>
         </div>
         <div className="state">
+          <img
+            src="/mascots/mascot-cool-v2.png"
+            alt="Mascot"
+            style={{ width: 120, height: 120, marginBottom: 16, imageRendering: 'pixelated' }}
+          />
           <div className="state-title">登录后查看每日推荐</div>
           <p>登录酷狗账号即可获取每日推荐、云端歌单与在线播放</p>
           <button className="btn-dark" onClick={onOpenLogin}>

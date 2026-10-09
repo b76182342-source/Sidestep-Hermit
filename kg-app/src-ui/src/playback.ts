@@ -16,6 +16,8 @@ export interface SongItem {
   album: string
   /** 秒 */
   duration: number
+  /** 封面图片 URL */
+  artworkUrl?: string
 }
 
 export interface QueueEntry extends SongItem {
@@ -30,11 +32,18 @@ export interface QueueSnapshot {
 }
 
 /** 歌词一行 */
+export interface LyricWord {
+  startMs: number
+  durationMs: number
+  text: string
+}
+
 export interface LyricLine {
   timeMs: number
   durationMs: number
   text: string
   translation: string | null
+  words?: LyricWord[]
 }
 
 export const playback = {
@@ -73,6 +82,7 @@ export function toEntry(item: SongItem): QueueEntry {
     artist: item.artist,
     album: item.album,
     duration: item.duration,
+    artworkUrl: item.artworkUrl,
   }
 }
 

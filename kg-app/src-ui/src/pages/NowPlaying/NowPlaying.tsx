@@ -1,5 +1,5 @@
 /* 全屏正在播放 —— 对照设计稿 12-nowplaying */
-import { useMemo } from 'react'
+import { useMemo, useEffect, useRef } from 'react'
 import { actions } from '../../actions'
 import { usePlayerStore } from '../../store/player'
 import { useSeekDrag } from '../../hooks/useSeekDrag'
@@ -12,9 +12,23 @@ interface NowPlayingProps {
 
 export default function NowPlaying({ onClose }: NowPlayingProps) {
   const { current, state, position, duration, lyrics } = usePlayerStore()
+  const lyricContainerRef = useRef<HTMLElement>(null)
+  const activeLyricRef = useRef<HTMLDivElement>(null)
 
   const isPlaying = state === 'Playing'
   const playedRatio = duration > 0 ? Math.min(1, position / duration) : 0
+
+  // 调试：打印当前歌曲数据和歌词
+  useEffect(() => {
+    if (current) {
+      console.log('Current song:', current)
+      console.log('Artwork URL:', current.artworkUrl)
+      console.log('Lyrics count:', lyrics.length)
+      if (lyrics.length > 0) {
+        console.log('First lyric:', lyrics[0])
+      }
+    }
+  }, [current, lyrics])
 
   const { dragRatio, handlers } = useSeekDrag(duration, (ratio) => {
     void actions.seekRatio(ratio)
@@ -25,6 +39,45 @@ export default function NowPlaying({ onClose }: NowPlayingProps) {
 
   const times = useMemo(() => lyrics.map((l) => l.timeMs), [lyrics])
   const active = activeLyricIndex(times, position)
+
+  // 调试：打印播放位置和当前激活的歌词索引
+  useEffect(() => {
+    console.log('[NowPlaying] Position:', position, 'Active index:', active, 'Total lyrics:', lyrics.length)
+    if (lyrics.length > 0 && active >= 0) {
+      console.log('[NowPlaying] Current lyric:', lyrics[active])
+    }
+  }, [position, active, lyrics])
+
+  // 自动滚动到当前歌词
+  useEffect(() => {
+    if (activeLyricRef.current && lyricContainerRef.current) {
+      const container = lyricContainerRef.current
+      const activeElement = activeLyricRef.current
+
+      // 使用 requestAnimationFrame 确保 DOM 已更新
+      requestAnimationFrame(() => {
+        const containerHeight = container.clientHeight
+        const containerScrollTop = container.scrollTop
+        const elementTop = activeElement.offsetTop
+        const elementHeight = activeElement.clientHeight
+
+        // 计算元素相对于容器的位置
+        const elementCenter = elementTop + elementHeight / 2
+        const containerCenter = containerScrollTop + containerHeight / 2
+
+        // 只有当元素不在视口中心附近时才滚动
+        const offset = Math.abs(elementCenter - containerCenter)
+        if (offset > 50) {
+          const scrollTo = elementTop - containerHeight / 2 + elementHeight / 2
+
+          container.scrollTo({
+            top: Math.max(0, scrollTo),
+            behavior: 'smooth'
+          })
+        }
+      })
+    }
+  }, [active])
 
   if (!current) return null
 
@@ -38,7 +91,31 @@ export default function NowPlaying({ onClose }: NowPlayingProps) {
       </button>
 
       <section className="np-left">
-        <div className="np-art" style={{ background: coverColor(current.album || current.title) }} />
+        <div
+          className="np-art"
+          style={{
+            background: current.artworkUrl
+              ? `url(${current.artworkUrl}) center/cover no-repeat`
+              : coverColor(current.album || current.title),
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          {!current.artworkUrl && (
+            <img
+              src="/mascots/mascot-typing.png"
+              alt="Music"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                imageRendering: 'pixelated',
+                opacity: 0.9
+              }}
+            />
+          )}
+        </div>
 
         <div className="np-title">{current.title}</div>
         <div className="np-sub">
@@ -108,15 +185,56 @@ export default function NowPlaying({ onClose }: NowPlayingProps) {
         </div>
       </section>
 
-      <section className="np-right">
+      <section className="np-right" ref={lyricContainerRef}>
         {lyrics.length === 0 ? (
           <div className="np-lyric">暂无歌词</div>
         ) : (
-          lyrics.map((line, i) => (
-            <div key={`${line.timeMs}-${i}`} className={`np-lyric ${i === active ? 'on' : ''}`}>
-              {line.text}
-            </div>
-          ))
+          lyrics.map((line, i) => {
+            const isActive = i === active
+            // 计算逐字进度（仅当前行且有逐字数据时）
+            let wordProgress = 0
+            if (isActive && line.words && line.words.length > 0) {
+              const lineStartMs = line.timeMs
+              const currentMs = position * 1000
+              const elapsedMs = currentMs - lineStartMs
+
+              // 计算当前应该高亮到哪个字
+              let accumulated = 0
+              for (let j = 0; j < line.words.length; j++) {
+                accumulated += line.words[j].durationMs
+                if (elapsedMs < accumulated) {
+                  wordProgress = j
+                  break
+                }
+              }
+              if (elapsedMs >= accumulated) {
+                wordProgress = line.words.length
+              }
+            }
+
+            return (
+              <div
+                key={`${line.timeMs}-${i}`}
+                ref={isActive ? activeLyricRef : null}
+                className={`np-lyric ${isActive ? 'on' : ''}`}
+              >
+                {line.words && line.words.length > 0 ? (
+                  // 有逐字数据，渲染每个字
+                  line.words.map((word, j) => (
+                    <span
+                      key={j}
+                      className={isActive && j < wordProgress ? 'word-active' : ''}
+                    >
+                      {word.text}
+                    </span>
+                  ))
+                ) : (
+                  // 无逐字数据，显示整行
+                  line.text
+                )}
+              </div>
+            )
+          })
         )}
       </section>
     </div>

@@ -60,7 +60,10 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
     })),
 
   setState: (state) => set({ state }),
-  setPosition: (position) => set({ position }),
+  setPosition: (position) => {
+    console.log('[Store] setPosition called with:', position)
+    set({ position })
+  },
   setDuration: (duration) => set({ duration }),
   setVolume: (volume) => set({ volume }),
   setLyrics: (lyrics) => set({ lyrics }),

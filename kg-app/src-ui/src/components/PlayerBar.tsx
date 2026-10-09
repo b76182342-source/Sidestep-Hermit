@@ -127,9 +127,28 @@ export default function PlayerBar({ onOpenQueue, onOpenNowPlaying }: PlayerBarPr
                 style={{
                   width: '100%',
                   height: '100%',
-                  background: coverColor(current.album || current.title),
+                  background: current.artworkUrl
+                    ? `url(${current.artworkUrl}) center/cover no-repeat`
+                    : coverColor(current.album || current.title),
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}
-              />
+              >
+                {!current.artworkUrl && (
+                  <img
+                    src="/mascots/mascot-cool-v2.png"
+                    alt="Music"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      imageRendering: 'pixelated',
+                      opacity: 0.9
+                    }}
+                  />
+                )}
+              </div>
             </div>
             <div className="pb-meta">
               <div className="pb-title">{current.title}</div>

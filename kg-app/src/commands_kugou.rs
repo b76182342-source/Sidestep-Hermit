@@ -192,12 +192,41 @@ pub async fn kugou_daily() -> Result<serde_json::Value, String> {
     let auth = guard.as_mut().ok_or("认证状态初始化失败")?;
     let hits = auth.daily().await.map_err(|e| e.to_string())?;
 
+    // 调试：输出第一首歌的封面 URL
+    if let Some(first) = hits.first() {
+        eprintln!("[DAILY] First song: {} - artwork_url: {:?}", first.title, first.artwork_url);
+    }
+
     serde_json::to_value(hits).map_err(|e| e.to_string())
 }
 
 #[cfg(not(feature = "kugou"))]
 #[tauri::command]
 pub async fn kugou_daily() -> Result<serde_json::Value, String> {
+    Err("Kugou feature not enabled".to_string())
+}
+
+/// 我喜欢的歌曲（系统默认收藏歌单）。
+#[cfg(feature = "kugou")]
+#[tauri::command]
+pub async fn kugou_liked_songs() -> Result<serde_json::Value, String> {
+    let mut guard = KUGOU_AUTH.lock().await;
+    ensure_auth(&mut guard).await?;
+
+    let auth = guard.as_mut().ok_or("认证状态初始化失败")?;
+    let hits = auth.liked_songs().await.map_err(|e| e.to_string())?;
+
+    // 调试：输出第一首歌的封面 URL
+    if let Some(first) = hits.first() {
+        eprintln!("[LIKED] First song: {} - artwork_url: {:?}", first.title, first.artwork_url);
+    }
+
+    serde_json::to_value(hits).map_err(|e| e.to_string())
+}
+
+#[cfg(not(feature = "kugou"))]
+#[tauri::command]
+pub async fn kugou_liked_songs() -> Result<serde_json::Value, String> {
     Err("Kugou feature not enabled".to_string())
 }
 
@@ -305,5 +334,23 @@ pub async fn kugou_logout() -> Result<(), String> {
 #[cfg(not(feature = "kugou"))]
 #[tauri::command]
 pub async fn kugou_logout() -> Result<(), String> {
+    Err("Kugou feature not enabled".to_string())
+}
+
+/// 获取歌曲的真实封面 URL
+#[cfg(feature = "kugou")]
+pub async fn get_artwork_url(hash: &str) -> Result<String, String> {
+    use kg_providers::KugouProvider;
+    use kg_core::{MusicProvider, TrackId};
+
+    let provider = KugouProvider::new();
+    let track_id = TrackId::new("kugou", hash);
+    let track = provider.track(&track_id).await.map_err(|e| e.to_string())?;
+
+    track.album_art_url.ok_or_else(|| "No artwork URL available".to_string())
+}
+
+#[cfg(not(feature = "kugou"))]
+pub async fn get_artwork_url(_hash: &str) -> Result<String, String> {
     Err("Kugou feature not enabled".to_string())
 }

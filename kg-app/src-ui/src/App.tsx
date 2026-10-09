@@ -7,6 +7,7 @@ import Albums from './pages/Albums/Albums'
 import Artists from './pages/Artists/Artists'
 import Daily from './pages/Daily/Daily'
 import History from './pages/History/History'
+import Liked from './pages/Liked/Liked'
 import Settings from './pages/Settings/Settings'
 import NowPlaying from './pages/NowPlaying/NowPlaying'
 
@@ -25,7 +26,7 @@ import { useHistoryStore } from './store/history'
 import { useKugouStore } from './store/kugou'
 
 /** 展示右栏（正在播放 / 歌词）的视图 */
-const PANEL_VIEWS = new Set<SidebarKey>(['songs', 'daily', 'history'])
+const PANEL_VIEWS = new Set<SidebarKey>(['songs', 'daily', 'history', 'liked'])
 
 export default function App() {
   const [source, setSource] = useState<Source>('local')
@@ -59,13 +60,22 @@ export default function App() {
   useEffect(() => {
     const unlisten = listen('player-event', (event: any) => {
       const p = event.payload ?? {}
-      switch (p.type) {
+      console.log('[App] Player event received:', JSON.stringify(p))
+      switch (p.type) {  // 后端使用 #[serde(rename = "type")]
         case 'StateChanged':
+          console.log('[App] State changed to:', p.state)
           setState(p.state ?? 'Stopped')
           break
         case 'PositionChanged':
-          if (p.position !== undefined) setPosition(p.position)
-          if (p.duration !== undefined) setDuration(p.duration)
+          console.log('[App] Position changed - position:', p.position, 'duration:', p.duration)
+          if (p.position !== undefined) {
+            console.log('[App] Calling setPosition with:', p.position)
+            setPosition(p.position)
+          }
+          if (p.duration !== undefined) {
+            console.log('[App] Calling setDuration with:', p.duration)
+            setDuration(p.duration)
+          }
           break
         case 'VolumeChanged':
           if (p.volume !== undefined) setVolume(p.volume)
@@ -81,6 +91,7 @@ export default function App() {
   // 队列变化（换歌、增删、跳转都会广播）
   useEffect(() => {
     const unlisten = listen('playback-changed', (event: any) => {
+      console.log('[App] Playback changed event received:', event.payload)
       applyPlayback({
         items: (event.payload?.items ?? []) as QueueEntry[],
         index: event.payload?.index ?? null,
@@ -219,13 +230,21 @@ export default function App() {
           />
         )
       case 'liked':
+        return (
+          <Liked
+            {...shared}
+            query={query}
+            isLoggedIn={isLoggedIn}
+            onOpenLogin={() => setShowLogin(true)}
+          />
+        )
       case 'commute':
       case 'night':
         return (
           <>
             <div className="page-head">
               <h1 className="page-title">
-                {view === 'liked' ? '我喜欢' : view === 'commute' ? '通勤' : '深夜'}
+                {view === 'commute' ? '通勤' : '深夜'}
               </h1>
               <span className="page-sub">酷狗云端歌单</span>
             </div>
