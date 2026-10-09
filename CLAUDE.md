@@ -8,6 +8,66 @@
 
 4. **只播放用户有权播放的内容**。
 
+# Git 工作流
+
+**重要：本项目只使用主分支（main），不创建任何其他分支。**
+
+所有开发、修复和功能更新都直接提交到 main 分支：
+
+```bash
+# 提交更改
+git add .
+git commit -m "feat: 描述更改内容"
+git push origin main
+```
+
+不要使用 `git checkout -b` 创建新分支，也不要使用 worktree。所有工作都在主分支上进行。
+
+# 打包与系统集成
+
+## 构建发布包
+
+```bash
+cd kg-app
+cargo tauri build --features kugou
+```
+
+生成的安装包位置：
+- **Debian/Ubuntu**: `target/release/bundle/deb/Sidestep Hermit_VERSION_amd64.deb`
+- **AppImage**: `target/release/bundle/appimage/` (如果启用)
+
+## 系统集成
+
+安装 `.deb` 包后，应用会自动注册到 Linux 系统：
+
+1. **应用菜单** - 可从应用启动器搜索 "Sidestep Hermit"
+2. **桌面文件** - 安装到 `/usr/share/applications/`
+3. **可执行文件** - 安装到 `/usr/bin/` 或 `/opt/`
+4. **图标** - 安装到 `/usr/share/icons/`
+
+### 验证安装
+
+```bash
+# 检查是否已安装
+dpkg -l | grep -i hermit
+
+# 查找可执行文件
+which kgplayer
+
+# 从终端启动
+kgplayer  # 或 sidestep-hermit
+```
+
+### 卸载
+
+```bash
+sudo dpkg -r sidestep-hermit
+# 或
+sudo apt remove sidestep-hermit
+```
+
+Tauri 的 bundler 会自动创建 `.desktop` 文件并注册到系统，无需手动配置。
+
 # 架构决策
 
 ## 技术栈
@@ -67,13 +127,60 @@ GitHub Actions 检查：fmt、clippy、test、deny
 - M3: 播放列表与搜索 ✅
 - M4: 酷狗 Provider（登录框架已就绪，搜索/播放待接入）🟡
 - M5: 打包（.deb + AppImage）✅
+- M6: 歌词滚动优化 ✅
+
+## UI 组件设计
+
+### 歌词滚动实现
+
+项目使用标准的 `scrollIntoView()` API 实现歌词滚动同步，参考业界成熟方案：
+
+**核心实现**（`NowPlayingPanel.tsx` 和 `NowPlaying.tsx`）：
+
+```typescript
+const times = useMemo(() => lyrics.map((l) => l.timeMs), [lyrics])
+const active = activeLyricIndex(times, position)
+const activeLineRef = useRef<HTMLDivElement>(null)
+
+// 使用浏览器原生 API 实现平滑滚动
+useEffect(() => {
+  if (activeLineRef.current) {
+    activeLineRef.current.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',      // 当前歌词居中显示
+      inline: 'nearest'     // 使用最近的可滚动容器
+    })
+  }
+}, [active])
+```
+
+**设计原则**：
+- 统一状态驱动：`active` 索引变化时立即触发滚动
+- 浏览器原生优化：滚动计算由浏览器引擎处理，无需手动计算 offsetTop
+- 居中对齐：当前播放的歌词始终显示在视口中心
+- 避免"两个滑块错开"问题：高亮切换和视觉滚动完全同步
+
+**参考资料**：
+- [Sync Audio with Text in React](https://www.cyishere.dev/blog/sync-audio-with-text-in-react)
+- [BlurLyric - 网易云第三方播放器](https://github.com/sider2vf/BlurLyric)
+
+### 页面结构
+
+1. **右侧面板** (`src/components/NowPlayingPanel.tsx`)
+   - 上方：专辑封面（有封面时显示封面，无封面时显示吉祥物）+ 歌曲信息
+   - 下方：可滚动的歌词列表，当前播放行高亮显示
+
+2. **全屏歌词页面** (`src/pages/NowPlaying/NowPlaying.tsx`)
+   - 左侧：专辑封面 + 播放控制
+   - 右侧：全屏歌词显示，支持逐字高亮
+   - 使用相同的 `scrollIntoView()` 滚动逻辑
 
 ## 已知技术债
 
 - LRC 内嵌歌词（ID3 USLT/SYLT）未实现，lofty 0.22 不直接支持。
 - 酷狗 Provider 的 `search` / `stream_source` 仍是占位实现。
 - 内存占用约 240 MB RSS（空曲库），超出 200 MB 目标；
-  主要是 WebKit + GTK 的固定开销，需用 1 万首曲库实测才能判定是否真超标。
+  主要是 WebKit 的固定开销，需用 1 万首曲库实测才能判定是否真超标。
 - `Queue` 的随机播放不记播放历史（`fastrand` 直接随机，可能短期内重复）。
 
 ## 构建与运行
@@ -93,8 +200,8 @@ dev 构建，界面上只会在调用时冒出一句「Kugou feature not enabled
 
 发布构建反过来：`custom-protocol` 必开且蕴含 `kugou`，所以不需要额外参数。
 
-开发构建的窗口标题会显示 `KGPlayer (dev · 需要 Vite)`，发布构建才是干净的
-`KGPlayer`；两者界面差异极大（dev 需要 Vite 在跑，否则白屏报错），
+开发构建的窗口标题会显示 `Sidestep Hermit (dev · 需要 Vite)`，发布构建才是干净的
+`Sidestep Hermit`；两者界面差异极大（dev 需要 Vite 在跑，否则白屏报错），
 认标题可以少走弯路。
 
 ## 坑：`tauri` 依赖不能走 workspace 继承
