@@ -67,13 +67,60 @@ GitHub Actions 检查：fmt、clippy、test、deny
 - M3: 播放列表与搜索 ✅
 - M4: 酷狗 Provider（登录框架已就绪，搜索/播放待接入）🟡
 - M5: 打包（.deb + AppImage）✅
+- M6: 歌词滚动优化 ✅
+
+## UI 组件设计
+
+### 歌词滚动实现
+
+项目使用标准的 `scrollIntoView()` API 实现歌词滚动同步，参考业界成熟方案：
+
+**核心实现**（`NowPlayingPanel.tsx` 和 `NowPlaying.tsx`）：
+
+```typescript
+const times = useMemo(() => lyrics.map((l) => l.timeMs), [lyrics])
+const active = activeLyricIndex(times, position)
+const activeLineRef = useRef<HTMLDivElement>(null)
+
+// 使用浏览器原生 API 实现平滑滚动
+useEffect(() => {
+  if (activeLineRef.current) {
+    activeLineRef.current.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',      // 当前歌词居中显示
+      inline: 'nearest'     // 使用最近的可滚动容器
+    })
+  }
+}, [active])
+```
+
+**设计原则**：
+- 统一状态驱动：`active` 索引变化时立即触发滚动
+- 浏览器原生优化：滚动计算由浏览器引擎处理，无需手动计算 offsetTop
+- 居中对齐：当前播放的歌词始终显示在视口中心
+- 避免"两个滑块错开"问题：高亮切换和视觉滚动完全同步
+
+**参考资料**：
+- [Sync Audio with Text in React](https://www.cyishere.dev/blog/sync-audio-with-text-in-react)
+- [BlurLyric - 网易云第三方播放器](https://github.com/sider2vf/BlurLyric)
+
+### 页面结构
+
+1. **右侧面板** (`src/components/NowPlayingPanel.tsx`)
+   - 上方：专辑封面（有封面时显示封面，无封面时显示吉祥物）+ 歌曲信息
+   - 下方：可滚动的歌词列表，当前播放行高亮显示
+
+2. **全屏歌词页面** (`src/pages/NowPlaying/NowPlaying.tsx`)
+   - 左侧：专辑封面 + 播放控制
+   - 右侧：全屏歌词显示，支持逐字高亮
+   - 使用相同的 `scrollIntoView()` 滚动逻辑
 
 ## 已知技术债
 
 - LRC 内嵌歌词（ID3 USLT/SYLT）未实现，lofty 0.22 不直接支持。
 - 酷狗 Provider 的 `search` / `stream_source` 仍是占位实现。
 - 内存占用约 240 MB RSS（空曲库），超出 200 MB 目标；
-  主要是 WebKit + GTK 的固定开销，需用 1 万首曲库实测才能判定是否真超标。
+  主要是 WebKit 的固定开销，需用 1 万首曲库实测才能判定是否真超标。
 - `Queue` 的随机播放不记播放历史（`fastrand` 直接随机，可能短期内重复）。
 
 ## 构建与运行

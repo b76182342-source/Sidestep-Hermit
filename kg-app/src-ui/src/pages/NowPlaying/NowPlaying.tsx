@@ -40,41 +40,13 @@ export default function NowPlaying({ onClose }: NowPlayingProps) {
   const times = useMemo(() => lyrics.map((l) => l.timeMs), [lyrics])
   const active = activeLyricIndex(times, position)
 
-  // 调试：打印播放位置和当前激活的歌词索引
+  // 自动滚动到当前歌词 - 使用标准的 scrollIntoView API
   useEffect(() => {
-    console.log('[NowPlaying] Position:', position, 'Active index:', active, 'Total lyrics:', lyrics.length)
-    if (lyrics.length > 0 && active >= 0) {
-      console.log('[NowPlaying] Current lyric:', lyrics[active])
-    }
-  }, [position, active, lyrics])
-
-  // 自动滚动到当前歌词
-  useEffect(() => {
-    if (activeLyricRef.current && lyricContainerRef.current) {
-      const container = lyricContainerRef.current
-      const activeElement = activeLyricRef.current
-
-      // 使用 requestAnimationFrame 确保 DOM 已更新
-      requestAnimationFrame(() => {
-        const containerHeight = container.clientHeight
-        const containerScrollTop = container.scrollTop
-        const elementTop = activeElement.offsetTop
-        const elementHeight = activeElement.clientHeight
-
-        // 计算元素相对于容器的位置
-        const elementCenter = elementTop + elementHeight / 2
-        const containerCenter = containerScrollTop + containerHeight / 2
-
-        // 只有当元素不在视口中心附近时才滚动
-        const offset = Math.abs(elementCenter - containerCenter)
-        if (offset > 50) {
-          const scrollTo = elementTop - containerHeight / 2 + elementHeight / 2
-
-          container.scrollTo({
-            top: Math.max(0, scrollTo),
-            behavior: 'smooth'
-          })
-        }
+    if (activeLyricRef.current) {
+      activeLyricRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',      // 垂直方向：居中对齐
+        inline: 'nearest'     // 水平方向：最近的可滚动容器
       })
     }
   }, [active])
