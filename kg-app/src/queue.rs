@@ -178,6 +178,7 @@ mod tests {
             album: String::new(),
             duration: 0,
             inserted: false,
+            artwork_url: None,
         }
     }
 

@@ -92,11 +92,12 @@ impl Player {
             if let Some(pos) = pos {
                 // 保持纳秒，由上层转换为秒
                 let position = pos.nseconds();
-                let duration = player.duration()
-                    .map(|d| d.nseconds())
-                    .unwrap_or(0);
+                let duration = player.duration().map(|d| d.nseconds()).unwrap_or(0);
 
-                eprintln!("[Player] Sending PositionChanged: {} ns / {} ns", position, duration);
+                eprintln!(
+                    "[Player] Sending PositionChanged: {} ns / {} ns",
+                    position, duration
+                );
                 let _ = event_tx_clone.send(PlayerEvent::PositionChanged { position, duration });
             }
         });
@@ -105,18 +106,17 @@ impl Player {
         // 使用定时器主动查询位置
         let gst_player_clone = gst_player.clone();
         let event_tx_clone = event_tx.clone();
-        std::thread::spawn(move || {
-            loop {
-                std::thread::sleep(std::time::Duration::from_millis(100));
+        std::thread::spawn(move || loop {
+            std::thread::sleep(std::time::Duration::from_millis(100));
 
-                if let Some(pos) = gst_player_clone.position() {
-                    let position = pos.nseconds();
-                    let duration = gst_player_clone.duration()
-                        .map(|d| d.nseconds())
-                        .unwrap_or(0);
+            if let Some(pos) = gst_player_clone.position() {
+                let position = pos.nseconds();
+                let duration = gst_player_clone
+                    .duration()
+                    .map(|d| d.nseconds())
+                    .unwrap_or(0);
 
-                    let _ = event_tx_clone.send(PlayerEvent::PositionChanged { position, duration });
-                }
+                let _ = event_tx_clone.send(PlayerEvent::PositionChanged { position, duration });
             }
         });
 

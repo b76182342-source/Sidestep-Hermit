@@ -194,7 +194,10 @@ pub async fn kugou_daily() -> Result<serde_json::Value, String> {
 
     // 调试：输出第一首歌的封面 URL
     if let Some(first) = hits.first() {
-        eprintln!("[DAILY] First song: {} - artwork_url: {:?}", first.title, first.artwork_url);
+        eprintln!(
+            "[DAILY] First song: {} - artwork_url: {:?}",
+            first.title, first.artwork_url
+        );
     }
 
     serde_json::to_value(hits).map_err(|e| e.to_string())
@@ -218,7 +221,10 @@ pub async fn kugou_liked_songs() -> Result<serde_json::Value, String> {
 
     // 调试：输出第一首歌的封面 URL
     if let Some(first) = hits.first() {
-        eprintln!("[LIKED] First song: {} - artwork_url: {:?}", first.title, first.artwork_url);
+        eprintln!(
+            "[LIKED] First song: {} - artwork_url: {:?}",
+            first.title, first.artwork_url
+        );
     }
 
     serde_json::to_value(hits).map_err(|e| e.to_string())
@@ -340,14 +346,16 @@ pub async fn kugou_logout() -> Result<(), String> {
 /// 获取歌曲的真实封面 URL
 #[cfg(feature = "kugou")]
 pub async fn get_artwork_url(hash: &str) -> Result<String, String> {
-    use kg_providers::KugouProvider;
     use kg_core::{MusicProvider, TrackId};
+    use kg_providers::KugouProvider;
 
     let provider = KugouProvider::new();
     let track_id = TrackId::new("kugou", hash);
     let track = provider.track(&track_id).await.map_err(|e| e.to_string())?;
 
-    track.album_art_url.ok_or_else(|| "No artwork URL available".to_string())
+    track
+        .album_art_url
+        .ok_or_else(|| "No artwork URL available".to_string())
 }
 
 #[cfg(not(feature = "kugou"))]

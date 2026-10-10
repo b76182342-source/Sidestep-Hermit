@@ -393,11 +393,15 @@ impl KugouAuth {
                 duration_ms: l.duration_ms,
                 text: l.text,
                 translation: l.translation,
-                words: l.words.into_iter().map(|w| LyricWordDto {
-                    start_ms: w.start_ms,
-                    duration_ms: w.duration_ms,
-                    text: w.text,
-                }).collect(),
+                words: l
+                    .words
+                    .into_iter()
+                    .map(|w| LyricWordDto {
+                        start_ms: w.start_ms,
+                        duration_ms: w.duration_ms,
+                        text: w.text,
+                    })
+                    .collect(),
             })
             .collect())
     }

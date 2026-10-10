@@ -82,36 +82,37 @@ impl LocalProvider {
             .primary_tag()
             .or_else(|| tagged_file.first_tag());
 
-        let (title, artist, album, year, track_number, genre, album_art_url) = if let Some(tag) = tag {
-            // 提取封面图片
-            let artwork_url = Self::extract_artwork(tag, path).await;
+        let (title, artist, album, year, track_number, genre, album_art_url) =
+            if let Some(tag) = tag {
+                // 提取封面图片
+                let artwork_url = Self::extract_artwork(tag, path).await;
 
-            (
-                tag.title()
-                    .map(|s| s.to_string())
-                    .unwrap_or_else(|| Self::fallback_title(path)),
-                tag.artist()
-                    .map(|s| s.to_string())
-                    .unwrap_or_else(|| "Unknown Artist".into()),
-                tag.album()
-                    .map(|s| s.to_string())
-                    .unwrap_or_else(|| "Unknown Album".into()),
-                tag.year(),
-                tag.track(),
-                tag.genre().map(|s| s.to_string()),
-                artwork_url,
-            )
-        } else {
-            (
-                Self::fallback_title(path),
-                "Unknown Artist".into(),
-                "Unknown Album".into(),
-                None,
-                None,
-                None,
-                None,
-            )
-        };
+                (
+                    tag.title()
+                        .map(|s| s.to_string())
+                        .unwrap_or_else(|| Self::fallback_title(path)),
+                    tag.artist()
+                        .map(|s| s.to_string())
+                        .unwrap_or_else(|| "Unknown Artist".into()),
+                    tag.album()
+                        .map(|s| s.to_string())
+                        .unwrap_or_else(|| "Unknown Album".into()),
+                    tag.year(),
+                    tag.track(),
+                    tag.genre().map(|s| s.to_string()),
+                    artwork_url,
+                )
+            } else {
+                (
+                    Self::fallback_title(path),
+                    "Unknown Artist".into(),
+                    "Unknown Album".into(),
+                    None,
+                    None,
+                    None,
+                    None,
+                )
+            };
 
         Ok(Track {
             id: TrackId::local(&path_str),
@@ -143,15 +144,14 @@ impl LocalProvider {
                     "image/png"
                 } else {
                     "image/jpeg" // 默认
-                }.to_string()
+                }
+                .to_string()
             }
         };
 
         // 将图片编码为 Base64 data URL
-        let base64_data = base64::Engine::encode(
-            &base64::engine::general_purpose::STANDARD,
-            picture.data()
-        );
+        let base64_data =
+            base64::Engine::encode(&base64::engine::general_purpose::STANDARD, picture.data());
 
         Some(format!("data:{};base64,{}", mime_type, base64_data))
     }
