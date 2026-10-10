@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>歌词同步测试</title>
+  <style>
+    body { font-family: monospace; padding: 20px; }
+    .test { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+    .pass { background: #d4edda; }
+    .fail { background: #f8d7da; }
+  </style>
+</head>
+<body>
+  <h1>歌词时间戳对齐测试</h1>
+  
+  <div id="results"></div>
+
+  <script>
+    // 模拟 activeLyricIndex 函数
+    function activeLyricIndex(times, positionSec) {
+      const ms = positionSec * 1000
+      let idx = -1
+      for (let i = 0; i < times.length; i += 1) {
+        if (times[i] <= ms) idx = i
+        else break
+      }
+      return idx
+    }
+
+    // 测试用例
+    const tests = [
+      {
+        name: "精确匹配",
+        times: [0, 1000, 2000, 3000],
+        position: 2.0,
+        expected: 2
+      },
+      {
+        name: "稍早于时间戳",
+        times: [0, 1000, 2000, 3000],
+        position: 1.999,
+        expected: 1
+      },
+      {
+        name: "稍晚于时间戳",
+        times: [0, 1000, 2000, 3000],
+        position: 2.001,
+        expected: 2
+      },
+      {
+        name: "浮点精度问题",
+        times: [0, 117350],  // 117.35秒 = 117350毫秒
+        position: 117.35,
+        expected: 1
+      },
+      {
+        name: "实际场景：117.35秒",
+        times: [0, 5000, 10000, 117350, 120000],
+        position: 117.35,
+        expected: 3
+      }
+    ]
+
+    const resultsDiv = document.getElementById('results')
+    
+    tests.forEach(test => {
+      const result = activeLyricIndex(test.times, test.position)
+      const passed = result === test.expected
+      
+      const div = document.createElement('div')
+      div.className = `test ${passed ? 'pass' : 'fail'}`
+      div.innerHTML = `
+        <strong>${test.name}</strong><br>
+        Times: [${test.times.join(', ')}]<br>
+        Position: ${test.position}s (= ${test.position * 1000}ms)<br>
+        Expected: ${test.expected}, Got: ${result}<br>
+        Status: ${passed ? '✓ PASS' : '✗ FAIL'}
+      `
+      resultsDiv.appendChild(div)
+    })
+  </script>
+</body>
+</html>

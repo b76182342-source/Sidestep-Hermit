@@ -1,7 +1,7 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
-  "description": "KGPlayer 主窗口权限。事件订阅（歌词、播放状态、队列变化）依赖 core:event，缺了它前端收不到任何事件。",
+  "description": "Sidestep Hermit 主窗口权限。事件订阅（歌词、播放状态、队列变化）依赖 core:event，缺了它前端收不到任何事件。",
   "windows": ["main"],
   "permissions": ["core:default", "core:event:default"]
 }

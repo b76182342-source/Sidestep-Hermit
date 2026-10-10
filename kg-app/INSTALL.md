@@ -1,4 +1,4 @@
-# KGPlayer 安装指南
+# Sidestep Hermit 安装指南
 
 ## 安装
 
@@ -44,7 +44,7 @@ chmod +x kgplayer_0.1.0_amd64.AppImage
 
 ## 首次使用
 
-1. 启动 KGPlayer
+1. 启动 Sidestep Hermit
 2. 本地音乐：把文件放进音乐目录后点「扫描音乐库」
 3. 在线音乐：点「登录」扫码登录酷狗，切到「酷狗」标签即可搜索与查看每日推荐
 

@@ -133,6 +133,11 @@
 }
 
 /* ── 右栏：正在播放预览 ── */
+/* 上方区块：吉祥物 + 歌曲信息（固定） */
+.np-panel-header {
+  flex: none;
+}
+
 .np-panel-art {
   width: 292px;
   height: 292px;
@@ -161,16 +166,26 @@
   color: var(--text-2);
 }
 
-.np-lyrics {
+/* 下方区块：歌词（可滚动） */
+.np-panel-lyrics-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
   margin-top: 20px;
+  min-height: 0;
+}
+
+.np-lyrics {
   display: flex;
   flex-direction: column;
+  padding-bottom: 200px; /* 底部留白，让最后的歌词也能滚动到顶部 */
 }
 
 .np-line {
   font-size: var(--fs-md);
   color: var(--text-2);
   line-height: 40px;
+  transition: all 0.3s ease;
 }
 
 .np-line.on {

@@ -27,8 +27,15 @@ git push origin main
 
 ## 构建发布包
 
+**重要：每次更改代码后，必须重新编译生成新的安装包，才能让安装的应用包含最新代码。**
+
 ```bash
 cd kg-app
+
+# 清理旧的编译产物（确保完全重新编译）
+cargo clean
+
+# 编译生成新的安装包
 cargo tauri build --features kugou
 ```
 
@@ -36,14 +43,34 @@ cargo tauri build --features kugou
 - **Debian/Ubuntu**: `target/release/bundle/deb/Sidestep Hermit_VERSION_amd64.deb`
 - **AppImage**: `target/release/bundle/appimage/` (如果启用)
 
+编译时间：首次约 10-15 分钟，增量编译 3-5 分钟。
+
+## 重新安装更新后的版本
+
+修改代码并重新编译后，需要重新安装才能生效：
+
+```bash
+# 1. 卸载当前版本
+sudo dpkg -r sidestep-hermit
+
+# 2. 安装新编译的版本
+sudo dpkg -i "target/release/bundle/deb/Sidestep Hermit_0.1.0_amd64.deb"
+
+# 3. 验证更新
+which sidestep-hermit
+sidestep-hermit  # 启动应用测试
+```
+
+**常见陷阱**：如果只修改了代码但没有重新编译和安装，运行的仍然是旧版本的应用。
+
 ## 系统集成
 
 安装 `.deb` 包后，应用会自动注册到 Linux 系统：
 
 1. **应用菜单** - 可从应用启动器搜索 "Sidestep Hermit"
-2. **桌面文件** - 安装到 `/usr/share/applications/`
-3. **可执行文件** - 安装到 `/usr/bin/` 或 `/opt/`
-4. **图标** - 安装到 `/usr/share/icons/`
+2. **桌面文件** - 安装到 `/usr/share/applications/Sidestep Hermit.desktop`
+3. **可执行文件** - 安装到 `/usr/bin/sidestep-hermit`
+4. **图标** - 安装到 `/usr/share/icons/hicolor/*/apps/sidestep-hermit.png`
 
 ### 验证安装
 
@@ -52,10 +79,13 @@ cargo tauri build --features kugou
 dpkg -l | grep -i hermit
 
 # 查找可执行文件
-which kgplayer
+which sidestep-hermit
+
+# 查看桌面文件
+cat "/usr/share/applications/Sidestep Hermit.desktop"
 
 # 从终端启动
-kgplayer  # 或 sidestep-hermit
+sidestep-hermit
 ```
 
 ### 卸载
@@ -66,7 +96,10 @@ sudo dpkg -r sidestep-hermit
 sudo apt remove sidestep-hermit
 ```
 
-Tauri 的 bundler 会自动创建 `.desktop` 文件并注册到系统，无需手动配置。
+Tauri 的 bundler 会自动创建 `.desktop` 文件并注册到系统，无需手动配置。配置文件位置：
+- `kg-app/tauri.conf.json` - Tauri 主配置
+- `kg-app/linux/sidestep-hermit.desktop.hbs` - 桌面文件模板
+- `kg-app/Cargo.toml` - 二进制文件名配置 (`[[bin]] name = "sidestep-hermit"`)
 
 # 架构决策
 

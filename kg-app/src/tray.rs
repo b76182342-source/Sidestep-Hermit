@@ -66,7 +66,7 @@ pub fn setup(app: &AppHandle) -> tauri::Result<()> {
     )?;
 
     let mut builder = TrayIconBuilder::with_id(TRAY_ID)
-        .tooltip("KGPlayer")
+        .tooltip("Sidestep Hermit")
         .menu(&menu)
         // 注意：Linux 的 AppIndicator 只能靠左键弹菜单，
         // 这里若关掉左键菜单，托盘菜单（含全部文字）就再也打不开了。
