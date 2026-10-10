@@ -69,8 +69,7 @@ npm run tauri build
 ```
 
 生成的安装包：
-- `../../target/release/bundle/deb/kgplayer_0.1.0_amd64.deb`
-- `../../target/release/bundle/appimage/kgplayer_0.1.0_amd64.AppImage`
+- `../../target/release/bundle/deb/sidestep-hermit_0.1.0_amd64.deb`
 
 ## 使用
 

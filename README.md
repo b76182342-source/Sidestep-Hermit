@@ -8,7 +8,7 @@
 
 *背着壳，横着走。*
 
-**安装包仅 7.9MB，CPU 占用 < 1%**
+**安装包仅 7.9MB**
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Rust](https://img.shields.io/badge/rust-1.75%2B-orange.svg)](https://www.rust-lang.org)
@@ -20,17 +20,21 @@
 
 ## 📖 简介
 
-**Sidestep Hermit (寄居蟹)** 是一个现代化的 Linux 桌面音乐播放器，支持本地音乐库和在线音源（酷狗音乐）。
+**Sidestep Hermit** 是一个现代化的 Linux 桌面音乐播放器，支持本地音乐库和在线音源（酷狗音乐）。
 
-基于 **Tauri 2 + React + Rust + GStreamer** 构建，轻量、快速、跨平台。
+基于 **Tauri 2 + React + Rust + GStreamer** 构建，本地优先、轻量、快速。
+
+---
+
+**⚠️ 重要声明**
+
+本项目是非官方项目，与酷狗无隶属关系，也未获得其认可。在线音源功能依赖用户自行提供的接口，使用者需遵守相关服务条款和当地法律。
+
+---
 
 ## 📸 截图
 
 <div align="center">
-
-![每日推荐](assets/screenshot-daily.webp)
-
-*每日推荐 - 酷狗云端推荐歌曲*
 
 ![正在播放](assets/screenshot-playing.webp)
 
@@ -92,15 +96,11 @@ sudo dnf install \
 
 #### 从发布包安装（推荐）
 
-下载 `.deb` 或 `.AppImage` 文件：
+从 [Releases](https://github.com/b76182342-source/Sidestep-Hermit/releases) 下载 `.deb` 文件：
 
 ```bash
 # Debian/Ubuntu
-sudo dpkg -i kgplayer_*.deb
-
-# AppImage (所有发行版)
-chmod +x kgplayer_*.AppImage
-./kgplayer_*.AppImage
+sudo apt install ./sidestep-hermit_0.1.0_amd64.deb
 ```
 
 #### 从源码编译
@@ -111,7 +111,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # 克隆仓库
 git clone https://github.com/b76182342-source/Sidestep-Hermit.git
-cd kgplayer
+cd Sidestep-Hermit
 
 # 编译并运行（开发模式）
 cd kg-app
@@ -133,7 +133,8 @@ cargo tauri build --features kugou
                │ Tauri IPC
 ┌──────────────┴──────────────────────┐
 │   Rust Backend (Tauri 2)            │
-│   - kg-player: GStreamer 播放器     │
+│   - kg-core: 领域模型与 IPC         │
+│   - kg-audio: GStreamer 播放引擎    │
 │   - kg-lyrics: LRC 歌词解析         │
 │   - kg-store: SQLite 数据库         │
 │   - kg-providers: 音源适配器        │
@@ -146,8 +147,9 @@ cargo tauri build --features kugou
 ## 📦 项目结构
 
 ```
-kgplayer/
-├── kg-player/       # GStreamer 音频播放引擎
+Sidestep-Hermit/
+├── kg-core/         # 核心领域模型
+├── kg-audio/        # GStreamer 音频播放引擎
 ├── kg-providers/    # 音源提供者（本地 + 酷狗）
 ├── kg-lyrics/       # LRC 歌词解析与同步
 ├── kg-store/        # SQLite 数据库与持久化
@@ -163,16 +165,16 @@ kgplayer/
 - [x] M1: 本地音乐播放 + React UI
 - [x] M2: 歌词同步显示
 - [x] M3: 播放列表与搜索
-- [x] M6: 歌词滚动优化 (scrollIntoView API)
 - [🟡] M4: 酷狗音乐集成（登录框架已完成）
-- [x] M5: 打包与发布 (.deb + AppImage)
+- [x] M5: 打包与发布 (.deb)
+- [x] M6: 歌词滚动优化 (scrollIntoView API)
 
 ## 🎨 截图
 
 <details>
-<summary>点击展开查看应用截图</summary>
+<summary>点击展开查看更多应用截图</summary>
 
-*截图即将添加*
+*更多截图即将添加*
 
 </details>
 
@@ -211,8 +213,6 @@ npm run lint
 
 [GPL-3.0-or-later](LICENSE)
 
-本项目依赖 GStreamer 的某些插件采用 GPL 许可证，因此整个应用也必须使用 GPL。
-
 ## 🤝 贡献
 
 欢迎贡献！请确保：
@@ -236,6 +236,6 @@ npm run lint
 
 **Made with 🦀 Rust and ❤️**
 
-*22周年快乐！背着壳，横着走。*
+*22 岁生日快乐！背着壳，横着走。*
 
 </div>
