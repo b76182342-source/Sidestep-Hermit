@@ -2504,7 +2504,7 @@ dependencies = [
 
 [[package]]
 name = "kg-app"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "directories",
@@ -2530,7 +2530,7 @@ dependencies = [
 
 [[package]]
 name = "kg-audio"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "glib 0.20.12",
  "gstreamer",
@@ -2543,7 +2543,7 @@ dependencies = [
 
 [[package]]
 name = "kg-core"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "async-trait",
  "fastrand",
@@ -2554,7 +2554,7 @@ dependencies = [
 
 [[package]]
 name = "kg-lyrics"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "kg-core",
  "lofty",
@@ -2566,7 +2566,7 @@ dependencies = [
 
 [[package]]
 name = "kg-mpris"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "kg-core",
@@ -2577,7 +2577,7 @@ dependencies = [
 
 [[package]]
 name = "kg-providers"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -2597,7 +2597,7 @@ dependencies = [
 
 [[package]]
 name = "kg-store"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "chrono",

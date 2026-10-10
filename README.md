@@ -90,7 +90,7 @@ sudo dnf install \
 
 ```bash
 # Debian/Ubuntu
-sudo apt install ./sidestep-hermit_0.1.0_amd64.deb
+sudo apt install ./sidestep-hermit_0.1.1_amd64.deb
 ```
 
 #### 从源码编译

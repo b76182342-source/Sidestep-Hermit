@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "sidestep-hermit",
+  "productName": "Sidestep Hermit",
   "identifier": "com.sidestephermit.app",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "build": {
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build",
