@@ -82,7 +82,10 @@ impl LocalProvider {
             .primary_tag()
             .or_else(|| tagged_file.first_tag());
 
-        let (title, artist, album, year, track_number, genre) = if let Some(tag) = tag {
+        let (title, artist, album, year, track_number, genre, album_art_url) = if let Some(tag) = tag {
+            // 提取封面图片
+            let artwork_url = Self::extract_artwork(tag, path).await;
+
             (
                 tag.title()
                     .map(|s| s.to_string())
@@ -96,12 +99,14 @@ impl LocalProvider {
                 tag.year(),
                 tag.track(),
                 tag.genre().map(|s| s.to_string()),
+                artwork_url,
             )
         } else {
             (
                 Self::fallback_title(path),
                 "Unknown Artist".into(),
                 "Unknown Album".into(),
+                None,
                 None,
                 None,
                 None,
@@ -114,11 +119,41 @@ impl LocalProvider {
             artist,
             album,
             duration_secs,
-            album_art_url: None,
+            album_art_url,
             year,
             track_number,
             genre,
         })
+    }
+
+    /// 从音频文件标签中提取封面图片，保存为 data URL
+    async fn extract_artwork(tag: &lofty::tag::Tag, _path: &Path) -> Option<String> {
+        // 获取封面图片
+        let picture = tag.pictures().first()?;
+
+        // 获取 MIME 类型
+        let mime_type = match picture.mime_type() {
+            Some(mime) => mime.to_string(),
+            None => {
+                // 根据图片数据推测类型
+                let data = picture.data();
+                if data.starts_with(&[0xFF, 0xD8, 0xFF]) {
+                    "image/jpeg"
+                } else if data.starts_with(&[0x89, 0x50, 0x4E, 0x47]) {
+                    "image/png"
+                } else {
+                    "image/jpeg" // 默认
+                }.to_string()
+            }
+        };
+
+        // 将图片编码为 Base64 data URL
+        let base64_data = base64::Engine::encode(
+            &base64::engine::general_purpose::STANDARD,
+            picture.data()
+        );
+
+        Some(format!("data:{};base64,{}", mime_type, base64_data))
     }
 
     fn fallback_title(path: &Path) -> String {
