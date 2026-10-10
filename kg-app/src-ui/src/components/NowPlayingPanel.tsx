@@ -94,9 +94,8 @@ export default function NowPlayingPanel() {
               objectFit: 'cover',
               imageRendering: 'pixelated',
               opacity: 0.8
-              }}
-            />
-          )}
+            }}
+          />
         </div>
 
         <div className="np-panel-title">{current.title}</div>
