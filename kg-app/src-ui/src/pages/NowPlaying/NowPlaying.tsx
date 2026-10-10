@@ -66,9 +66,7 @@ export default function NowPlaying({ onClose }: NowPlayingProps) {
         <div
           className="np-art"
           style={{
-            background: current.artworkUrl
-              ? `url(${current.artworkUrl}) center/cover no-repeat`
-              : `url(/mascots/mascot-typing.png) center/contain no-repeat`,
+            background: `url(/mascots/mascot-typing.png) center/contain no-repeat`,
             imageRendering: 'pixelated'
           }}
         >

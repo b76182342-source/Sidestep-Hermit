@@ -127,9 +127,7 @@ export default function PlayerBar({ onOpenQueue, onOpenNowPlaying }: PlayerBarPr
                 style={{
                   width: '100%',
                   height: '100%',
-                  background: current.artworkUrl
-                    ? `url(${current.artworkUrl}) center/cover no-repeat`
-                    : `url(/mascots/mascot-cool-v2.png) center/contain no-repeat`,
+                  background: `url(/mascots/mascot-cool-v2.png) center/contain no-repeat`,
                   imageRendering: 'pixelated'
                 }}
               >
