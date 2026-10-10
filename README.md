@@ -11,7 +11,7 @@
 **安装包仅 7.9MB**
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Rust](https://img.shields.io/badge/rust-1.75%2B-orange.svg)](https://www.rust-lang.org)
+[![Rust](https://img.shields.io/badge/rust-stable-orange.svg)](https://www.rust-lang.org)
 [![Tauri](https://img.shields.io/badge/tauri-2.0-brightgreen.svg)](https://tauri.app)
 
 </div>
@@ -31,16 +31,6 @@
 本项目是非官方项目，与酷狗无隶属关系，也未获得其认可。在线音源功能依赖用户自行提供的接口，使用者需遵守相关服务条款和当地法律。
 
 ---
-
-## 📸 截图
-
-<div align="center">
-
-![正在播放](assets/screenshot-playing.webp)
-
-*正在播放 - 歌词同步显示*
-
-</div>
 
 ## ✨ 特性
 
