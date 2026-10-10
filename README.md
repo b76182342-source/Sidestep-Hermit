@@ -28,9 +28,13 @@
 
 <div align="center">
 
-![主界面](assets/screenshot-main.webp)
+![每日推荐](assets/screenshot-daily.webp)
 
-*主界面 - 播放、歌词、收藏列表*
+*每日推荐 - 酷狗云端推荐歌曲*
+
+![正在播放](assets/screenshot-playing.webp)
+
+*正在播放 - 歌词同步显示*
 
 </div>
 
