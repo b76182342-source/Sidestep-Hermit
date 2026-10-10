@@ -8,6 +8,8 @@
 
 *背着壳，横着走。*
 
+**安装包仅 7.9MB，CPU 占用 < 1%**
+
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Rust](https://img.shields.io/badge/rust-1.75%2B-orange.svg)](https://www.rust-lang.org)
 [![Tauri](https://img.shields.io/badge/tauri-2.0-brightgreen.svg)](https://tauri.app)
@@ -21,6 +23,16 @@
 **Sidestep Hermit (寄居蟹)** 是一个现代化的 Linux 桌面音乐播放器，支持本地音乐库和在线音源（酷狗音乐）。
 
 基于 **Tauri 2 + React + Rust + GStreamer** 构建，轻量、快速、跨平台。
+
+## 📸 截图
+
+<div align="center">
+
+![主界面](assets/screenshot-main.webp)
+
+*主界面 - 播放、歌词、收藏列表*
+
+</div>
 
 ## ✨ 特性
 
@@ -94,7 +106,7 @@ chmod +x kgplayer_*.AppImage
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # 克隆仓库
-git clone https://github.com/YOUR_USERNAME/kgplayer.git
+git clone https://github.com/b76182342-source/Sidestep-Hermit.git
 cd kgplayer
 
 # 编译并运行（开发模式）
