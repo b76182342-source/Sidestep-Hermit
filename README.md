@@ -194,9 +194,9 @@ cargo clippy --workspace --all-targets --all-features -- -D warnings
 # 运行测试
 cargo test --workspace --all-features
 
-# 前端代码检查
+# 前端类型检查
 cd kg-app/src-ui
-npm run lint
+npm run typecheck
 ```
 
 ## 📄 许可证
@@ -208,7 +208,7 @@ npm run lint
 欢迎贡献！请确保：
 
 - Rust 代码通过 `cargo fmt` 和 `cargo clippy`
-- React 代码通过 `npm run lint`
+- React 代码通过 `npm run typecheck`
 - 添加必要的测试
 - 遵守项目的合规红线（详见 [CLAUDE.md](CLAUDE.md)）
 
