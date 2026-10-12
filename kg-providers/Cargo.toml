@@ -25,6 +25,7 @@ kugou_sdk = { version = "0.2", optional = true }
 [features]
 default = []
 kugou = ["dep:kugou_sdk"]
+netease = []
 
 [lints]
 workspace = true
