@@ -27,6 +27,7 @@ use kg_mpris::{MprisCommand, MprisController};
 
 mod commands;
 mod commands_kugou;
+mod commands_provider;
 mod playback;
 mod queue;
 #[cfg(feature = "kugou")]
@@ -263,6 +264,9 @@ fn run_inner() -> Result<(), Box<dyn std::error::Error>> {
             commands::queue_play_next,
             commands::queue_jump,
             commands::queue_remove,
+            // Provider 管理命令
+            commands_provider::list_providers,
+            commands_provider::account_statuses,
             // Kugou 命令
             commands_kugou::kugou_get_qr_code,
             commands_kugou::kugou_check_login,
