@@ -24,4 +24,7 @@ pub trait MusicProvider: Send + Sync {
 
     /// 获取歌词
     async fn lyrics(&self, id: &TrackId) -> Result<Option<Lyrics>>;
+
+    /// 向下转型辅助方法（用于访问具体 Provider 的特有方法）
+    fn as_any(&self) -> &dyn std::any::Any;
 }

@@ -109,6 +109,10 @@ impl MusicProvider for NeteaseProvider {
         let api = self.api.lock().await;
         api.get_lyrics(&id.id).await
     }
+
+    fn as_any(&self) -> &dyn std::any::Any {
+        self
+    }
 }
 
 /// 网易云 API 客户端（内部实现）

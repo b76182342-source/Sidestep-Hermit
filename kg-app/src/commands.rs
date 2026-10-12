@@ -10,8 +10,19 @@ use crate::AppState;
 
 #[tauri::command]
 pub async fn get_all_tracks(state: State<'_, AppState>) -> Result<Vec<Track>, String> {
-    state
-        .provider
+    // 从 registry 获取 LocalProvider
+    let provider = state
+        .registry
+        .get("local")
+        .ok_or_else(|| "本地 Provider 未注册".to_string())?;
+
+    // 向下转型为 LocalProvider（scan 是其特有方法）
+    let local_provider = provider
+        .as_any()
+        .downcast_ref::<kg_providers::LocalProvider>()
+        .ok_or_else(|| "Provider 类型不匹配".to_string())?;
+
+    local_provider
         .scan()
         .await
         .map_err(|e| format!("Failed to scan: {}", e))
@@ -19,8 +30,19 @@ pub async fn get_all_tracks(state: State<'_, AppState>) -> Result<Vec<Track>, St
 
 #[tauri::command]
 pub async fn scan_library(state: State<'_, AppState>) -> Result<(), String> {
-    let tracks = state
-        .provider
+    // 从 registry 获取 LocalProvider
+    let provider = state
+        .registry
+        .get("local")
+        .ok_or_else(|| "本地 Provider 未注册".to_string())?;
+
+    // 向下转型为 LocalProvider
+    let local_provider = provider
+        .as_any()
+        .downcast_ref::<kg_providers::LocalProvider>()
+        .ok_or_else(|| "Provider 类型不匹配".to_string())?;
+
+    let tracks = local_provider
         .scan()
         .await
         .map_err(|e| format!("Failed to scan: {}", e))?;
@@ -135,7 +157,13 @@ pub async fn get_lyrics(
     state: State<'_, AppState>,
     track_id: TrackId,
 ) -> Result<Option<LyricsResponse>, String> {
-    let lyrics = get_lyrics_for_track(&track_id, state.provider.as_ref())
+    // 从 registry 获取对应的 Provider
+    let provider = state
+        .registry
+        .get(&track_id.provider)
+        .ok_or_else(|| format!("未知音源：{}", track_id.provider))?;
+
+    let lyrics = get_lyrics_for_track(&track_id, provider.as_ref())
         .await
         .map_err(|e| format!("Failed to get lyrics: {}", e))?;
 

@@ -257,4 +257,8 @@ impl MusicProvider for LocalProvider {
         // TODO: 读取内嵌歌词
         Ok(None)
     }
+
+    fn as_any(&self) -> &dyn std::any::Any {
+        self
+    }
 }

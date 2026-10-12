@@ -760,6 +760,10 @@ impl MusicProvider for KugouProvider {
         // TODO: 实现酷狗歌词接口
         Ok(None)
     }
+
+    fn as_any(&self) -> &dyn std::any::Any {
+        self
+    }
 }
 
 impl Default for KugouProvider {

@@ -6,7 +6,7 @@ use tokio::sync::mpsc;
 use tracing::{debug, error, info};
 
 use kg_audio::{Player, PlayerCommand, PlayerEvent};
-use kg_core::PlayState;
+use kg_core::{PlayState, ProviderRegistry};
 use kg_providers::LocalProvider;
 use kg_store::Database;
 
@@ -58,7 +58,8 @@ fn ns_to_secs(ns: u64) -> f64 {
 }
 
 pub struct AppState {
-    pub provider: Arc<LocalProvider>,
+    /// Provider 注册中心（替代单一 provider）
+    pub registry: Arc<ProviderRegistry>,
     db: Arc<Mutex<Database>>,
     /// 统一播放队列（本地 + 在线）
     pub playback: Arc<playback::PlaybackCtx>,
@@ -111,13 +112,23 @@ fn run_inner() -> Result<(), Box<dyn std::error::Error>> {
                 .or_else(|| std::env::current_dir().ok())
                 .unwrap_or_else(|| std::path::PathBuf::from("."));
 
-            let provider = Arc::new(LocalProvider::new(vec![music_dir]));
+            // 创建 ProviderRegistry 并注册 LocalProvider
+            let local_provider = Arc::new(LocalProvider::new(vec![music_dir]));
+            let mut registry = ProviderRegistry::new();
+            registry.register(local_provider.clone());
+
+            // TODO: 注册其他 Provider (KugouProvider, NeteaseProvider)
+            // #[cfg(feature = "kugou")]
+            // registry.register(Arc::new(KugouProvider::new()));
+
+            let registry = Arc::new(registry);
 
             let (cmd_tx, mut cmd_rx) = mpsc::unbounded_channel::<PlayerCommand>();
 
             // 统一播放队列：命令层与 MPRIS 任务共享同一份状态
             let playback = Arc::new(playback::PlaybackCtx::new(
-                provider.clone(),
+                registry.clone(),
+                db.clone(),
                 cmd_tx.clone(),
                 app.handle().clone(),
             ));
@@ -178,7 +189,7 @@ fn run_inner() -> Result<(), Box<dyn std::error::Error>> {
             let mpris = None;
 
             let state = AppState {
-                provider,
+                registry,
                 db,
                 playback,
                 player_cmd_tx: cmd_tx,

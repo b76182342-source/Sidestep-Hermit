@@ -7,8 +7,8 @@ use tokio::sync::mpsc;
 use tracing::{debug, info, warn};
 
 use kg_audio::PlayerCommand;
-use kg_core::{MusicProvider, StreamSource, TrackId};
-use kg_providers::LocalProvider;
+use kg_core::{ProviderRegistry, StreamSource, TrackId};
+use kg_store::Database;
 
 use crate::queue::{PlayQueue, QueueEntry};
 
@@ -20,7 +20,8 @@ use crate::commands_kugou;
 
 /// 播放所需的共享上下文。命令层与 MPRIS 任务各持一份 `Arc`。
 pub struct PlaybackCtx {
-    provider: Arc<LocalProvider>,
+    registry: Arc<ProviderRegistry>,
+    db: Arc<Mutex<Database>>,
     queue: Mutex<PlayQueue>,
     cmd_tx: mpsc::UnboundedSender<PlayerCommand>,
     app: AppHandle,
@@ -28,12 +29,14 @@ pub struct PlaybackCtx {
 
 impl PlaybackCtx {
     pub fn new(
-        provider: Arc<LocalProvider>,
+        registry: Arc<ProviderRegistry>,
+        db: Arc<Mutex<Database>>,
         cmd_tx: mpsc::UnboundedSender<PlayerCommand>,
         app: AppHandle,
     ) -> Self {
         Self {
-            provider,
+            registry,
+            db,
             queue: Mutex::new(PlayQueue::default()),
             cmd_tx,
             app,
@@ -44,24 +47,27 @@ impl PlaybackCtx {
     ///
     /// 只解析账号有权播放的内容；受限曲目由取流环节直接报错，不做任何绕过。
     async fn resolve(&self, entry: &QueueEntry) -> Result<StreamSource, String> {
-        match entry.provider.as_str() {
-            "local" => self
-                .provider
-                .stream_source(&TrackId::new("local", &entry.id))
-                .await
-                .map_err(|e| format!("本地曲目无法播放：{e}")),
+        // 从 registry 获取对应的 Provider
+        let provider = self
+            .registry
+            .get(&entry.provider)
+            .ok_or_else(|| format!("未知音源：{}", entry.provider))?;
 
-            #[cfg(feature = "kugou")]
-            "kugou" => {
-                let outcome = commands_kugou::resolve_kugou_url(&entry.id).await?;
-                if outcome.preview {
-                    debug!("该曲目仅获授权试听片段");
-                }
-                Ok(StreamSource::Url(outcome.url))
+        // 特殊处理酷狗（保持向后兼容）
+        #[cfg(feature = "kugou")]
+        if entry.provider == "kugou" {
+            let outcome = commands_kugou::resolve_kugou_url(&entry.id).await?;
+            if outcome.preview {
+                debug!("该曲目仅获授权试听片段");
             }
-
-            other => Err(format!("未知音源：{other}")),
+            return Ok(StreamSource::Url(outcome.url));
         }
+
+        // 通用 Provider 处理
+        provider
+            .stream_source(&TrackId::new(&entry.provider, &entry.id))
+            .await
+            .map_err(|e| format!("曲目无法播放：{e}"))
     }
 
     /// 用新列表替换队列并从 `start` 开始播放。
