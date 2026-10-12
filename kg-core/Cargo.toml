@@ -10,6 +10,7 @@ serde.workspace = true
 async-trait.workspace = true
 uuid.workspace = true
 fastrand.workspace = true
+tokio.workspace = true
 
 [lints]
 workspace = true
