@@ -13,11 +13,18 @@
   - 模糊匹配和 Levenshtein 距离
   - 完整单元测试
 
+### 多平台凭据管理（kg-app）
+- [x] 扩展 secrets.rs 支持多平台
+  - CredentialKey 枚举（Kugou/Netease/QQMusic）
+  - 统一 service，按 account 区分
+  - 更新 commands_kugou.rs 适配新接口
+
 **提交**: 
 - ff4d3fc feat(core): 添加 ProviderRegistry 架构
 - a963f71 feat(core): 添加歌曲匹配引擎
+- 84ac94c feat(app): 扩展 secrets 支持多平台凭据管理
 
-**内存状态**: 10GB/14GB (可用 4.5GB) ✅
+**内存状态**: 10GB/14GB (可用 4.6GB) ✅
 
 ---
 
