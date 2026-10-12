@@ -26,6 +26,7 @@ fn build_runtime() -> std::io::Result<Runtime> {
 use kg_mpris::{MprisCommand, MprisController};
 
 mod commands;
+mod commands_ai;
 mod commands_kugou;
 mod commands_provider;
 mod playback;
@@ -267,6 +268,8 @@ fn run_inner() -> Result<(), Box<dyn std::error::Error>> {
             // Provider 管理命令
             commands_provider::list_providers,
             commands_provider::account_statuses,
+            // AI 命令
+            commands_ai::ai_command,
             // Kugou 命令
             commands_kugou::kugou_get_qr_code,
             commands_kugou::kugou_check_login,

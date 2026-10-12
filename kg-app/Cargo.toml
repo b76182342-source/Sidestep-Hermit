@@ -15,6 +15,7 @@ kg-providers.workspace = true
 kg-lyrics.workspace = true
 kg-store.workspace = true
 kg-mpris.workspace = true
+kg-ai.workspace = true
 
 # 直接声明（不走 workspace 继承），让 `cargo tauri build` 能自动加上
 # custom-protocol —— 否则 release 包会继续指向 devUrl。

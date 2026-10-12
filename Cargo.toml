@@ -6,6 +6,7 @@ members = [
     "kg-lyrics",
     "kg-store",
     "kg-mpris",
+    "kg-ai",
     "kg-app",
 ]
 resolver = "2"
@@ -24,6 +25,7 @@ kg-providers = { path = "kg-providers" }
 kg-lyrics = { path = "kg-lyrics" }
 kg-store = { path = "kg-store" }
 kg-mpris = { path = "kg-mpris" }
+kg-ai = { path = "kg-ai" }
 
 # Common dependencies
 tokio = { version = "1.41", features = ["rt-multi-thread", "macros", "sync", "time", "fs"] }
