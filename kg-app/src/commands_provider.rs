@@ -1,8 +1,8 @@
 //! Provider 管理相关的 Tauri 命令
 
-use tauri::State;
-use kg_core::{ProviderInfo, AccountStatus};
 use crate::AppState;
+use kg_core::{AccountStatus, ProviderInfo};
+use tauri::State;
 
 /// 列出所有可用的 Provider
 #[tauri::command]

@@ -114,9 +114,7 @@ fn fuzzy_match(a: &str, b: &str) -> bool {
     let clean_b = remove_parentheses(b);
 
     // Levenshtein 距离 <= 2 或包含关系
-    levenshtein(&clean_a, &clean_b) <= 2
-        || clean_a.contains(&clean_b)
-        || clean_b.contains(&clean_a)
+    levenshtein(&clean_a, &clean_b) <= 2 || clean_a.contains(&clean_b) || clean_b.contains(&clean_a)
 }
 
 /// 移除括号内容
@@ -143,7 +141,11 @@ fn levenshtein(a: &str, b: &str) -> usize {
 
     for i in 1..=a_chars.len() {
         for j in 1..=b_chars.len() {
-            let cost = if a_chars[i - 1] == b_chars[j - 1] { 0 } else { 1 };
+            let cost = if a_chars[i - 1] == b_chars[j - 1] {
+                0
+            } else {
+                1
+            };
             dp[i][j] = (dp[i - 1][j] + 1)
                 .min(dp[i][j - 1] + 1)
                 .min(dp[i - 1][j - 1] + cost);

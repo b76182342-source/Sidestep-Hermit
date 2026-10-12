@@ -2503,12 +2503,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "kg-ai"
+version = "0.1.1"
+dependencies = [
+ "async-trait",
+ "kg-core",
+ "regex",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+ "tokio",
+]
+
+[[package]]
 name = "kg-app"
 version = "0.1.1"
 dependencies = [
  "anyhow",
  "directories",
  "gstreamer",
+ "kg-ai",
  "kg-audio",
  "kg-core",
  "kg-lyrics",
