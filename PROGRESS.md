@@ -19,12 +19,27 @@
   - 统一 service，按 account 区分
   - 更新 commands_kugou.rs 适配新接口
 
+### 数据库扩展（kg-store）
+- [x] Migration v2 - 跨平台匹配支持
+  - track_matches 表（缓存匹配结果）
+  - idx_tracks_title 索引
+  - idx_matches_source 索引
+
+### 网易云 Provider（kg-providers）
+- [x] NeteaseProvider 骨架
+  - 实现 MusicProvider trait
+  - 定义 API 数据结构
+  - 添加 netease feature flag
+  - 合规声明和 TODO 标记
+
 **提交**: 
 - ff4d3fc feat(core): 添加 ProviderRegistry 架构
 - a963f71 feat(core): 添加歌曲匹配引擎
 - 84ac94c feat(app): 扩展 secrets 支持多平台凭据管理
+- 647bd84 feat(store): 添加数据库 Migration v2
+- afee298 feat(providers): 添加网易云 Provider 骨架
 
-**内存状态**: 10GB/14GB (可用 4.6GB) ✅
+**内存状态**: 10GB/14GB (可用 4.4GB) ✅
 
 ---
 
