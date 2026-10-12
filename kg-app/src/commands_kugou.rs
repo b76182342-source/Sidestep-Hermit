@@ -35,7 +35,7 @@ async fn ensure_auth(
         return Ok(());
     }
 
-    if let Ok(Some(json)) = secrets::load().await {
+    if let Ok(Some(json)) = secrets::load(secrets::CredentialKey::Kugou).await {
         if let Ok(auth) = KugouAuth::from_session_json(&json) {
             **guard = Some(auth);
             return Ok(());
@@ -60,7 +60,7 @@ pub async fn resolve_kugou_url(hash: &str) -> Result<kg_providers::kugou::Playba
 async fn persist_session(auth: &KugouAuth) {
     match auth.export_session() {
         Ok(json) => {
-            if let Err(e) = secrets::save(&json).await {
+            if let Err(e) = secrets::save(secrets::CredentialKey::Kugou, &json).await {
                 warn!("写入系统密钥环失败，本次登录无法跨重启保留: {e}");
             }
         }
@@ -138,7 +138,7 @@ pub async fn kugou_session() -> Result<serde_json::Value, String> {
     let mut auth_guard = KUGOU_AUTH.lock().await;
 
     if auth_guard.is_none() {
-        match secrets::load().await {
+        match secrets::load(secrets::CredentialKey::Kugou).await {
             Ok(Some(json)) => match KugouAuth::from_session_json(&json) {
                 Ok(auth) => {
                     debug!("已从系统密钥环恢复酷狗登录态");
@@ -330,7 +330,7 @@ pub async fn kugou_logout() -> Result<(), String> {
         *auth_guard = None;
     }
 
-    if let Err(e) = secrets::clear().await {
+    if let Err(e) = secrets::clear(secrets::CredentialKey::Kugou).await {
         warn!("清除系统密钥环失败: {e}");
     }
 
