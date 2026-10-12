@@ -10,9 +10,9 @@
 
 # Git 工作流
 
-**重要：本项目只使用主分支（main），不创建任何其他分支。**
+## 日常开发（小改动）
 
-所有开发、修复和功能更新都直接提交到 main 分支：
+对于小的修复、功能增强和日常维护，直接在 main 分支上提交：
 
 ```bash
 # 提交更改
@@ -21,7 +21,31 @@ git commit -m "feat: 描述更改内容"
 git push origin main
 ```
 
-不要使用 `git checkout -b` 创建新分支，也不要使用 worktree。所有工作都在主分支上进行。
+## 大型重构（颠覆性改造）
+
+对于大规模架构变更（如多平台统一管理、AI 集成），使用功能分支：
+
+```bash
+# 创建功能分支
+git checkout -b feature/multi-platform-ai
+
+# 开发过程中定期提交
+git add .
+git commit -m "feat: 实现 ProviderRegistry 架构"
+git push origin feature/multi-platform-ai
+
+# 完成后合并回 main
+git checkout main
+git merge feature/multi-platform-ai
+git push origin main
+```
+
+**分支命名规范**：
+- `feature/` - 新功能（如 feature/netease-provider）
+- `refactor/` - 重构（如 refactor/ai-integration）
+- `fix/` - 重大修复（如 fix/memory-leak）
+
+不使用 worktree。
 
 # 打包与系统集成
 
