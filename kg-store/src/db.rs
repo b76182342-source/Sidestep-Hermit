@@ -117,6 +117,32 @@ impl Database {
             )?;
         }
 
+        // Migration v2: 跨平台歌曲匹配支持
+        if version < 2 {
+            self.conn.execute_batch(
+                r#"
+                -- 添加标题索引以加速跨平台查询
+                CREATE INDEX IF NOT EXISTS idx_tracks_title ON tracks(title);
+
+                -- 歌曲匹配缓存表（用于加速跨平台同步）
+                CREATE TABLE IF NOT EXISTS track_matches (
+                    source_provider TEXT NOT NULL,
+                    source_id TEXT NOT NULL,
+                    target_provider TEXT NOT NULL,
+                    target_id TEXT NOT NULL,
+                    similarity_score INTEGER NOT NULL,
+                    created_at INTEGER NOT NULL,
+                    PRIMARY KEY (source_provider, source_id, target_provider)
+                );
+
+                CREATE INDEX IF NOT EXISTS idx_matches_source
+                    ON track_matches(source_provider, source_id);
+
+                PRAGMA user_version = 2;
+                "#,
+            )?;
+        }
+
         Ok(())
     }
 
